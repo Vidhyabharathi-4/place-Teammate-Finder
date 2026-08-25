@@ -1,0 +1,52 @@
+import api from "./api";
+
+// Apply to a team
+const applyToTeam = async (teamId, message) => {
+  const response = await api.post(
+    `/api/applications/teams/${teamId}`,
+    {
+      message,
+    }
+  );
+
+  return response.data;
+};
+
+// Get applications for a team (Team Owner)
+const getTeamApplications = async (teamId) => {
+  const response = await api.get(
+    `/api/applications/teams/${teamId}`
+  );
+
+  return response.data;
+};
+
+// Get my applications
+const getMyApplications = async () => {
+  const response = await api.get("/api/applications/my");
+  return response.data;
+};
+
+// Accept / Reject application
+const updateApplicationStatus = async (
+  applicationId,
+  status
+) => {
+  const response = await api.put(
+    `/api/applications/${applicationId}`,
+    {
+      status,
+    }
+  );
+
+  return response.data;
+};
+
+const applicationService = {
+  applyToTeam,
+  getTeamApplications,
+  getMyApplications,
+  updateApplicationStatus,
+};
+
+export default applicationService;
