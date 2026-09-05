@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:match*",
-      "destination": "https://REPLACE_WITH_YOUR_RENDER_BACKEND_URL/api/:match*"
+      "destination": "https://place-teammate-finder.onrender.com/api/:match*"
     },
     {
       "source": "/uploads/:match*",
-      "destination": "https://REPLACE_WITH_YOUR_RENDER_BACKEND_URL/uploads/:match*"
+      "destination": "https://place-teammate-finder.onrender.com/uploads/:match*"
     },
     {
       "source": "/((?!api|uploads).*)",
