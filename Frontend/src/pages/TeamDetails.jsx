@@ -79,14 +79,14 @@ function TeamDetails() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8">
+    <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
 
       {/* Header */}
 
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl text-white p-8 shadow-lg">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl text-white p-5 sm:p-8 shadow-lg">
 
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-4xl font-bold">
+          <h1 className="text-2xl sm:text-4xl font-bold">
             {team.team_name}
           </h1>
 

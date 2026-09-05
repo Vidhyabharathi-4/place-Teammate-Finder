@@ -70,7 +70,7 @@ function Teams() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
 
       {/* Header with Title & Create Team Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">

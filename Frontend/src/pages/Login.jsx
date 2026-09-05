@@ -6,8 +6,10 @@ import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const sessionExpired = searchParams.get("expired") === "1";
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [sessionExpired, setSessionExpired] = useState(
+    searchParams.get("expired") === "1"
+  );
   const { loginUser } = useAuth();
 
   const [email, setEmail] = useState("");
@@ -18,7 +20,7 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    setSessionExpired(false);
     setLoading(true);
     setError("");
 
@@ -109,7 +111,10 @@ function Login() {
                 type="email"
                 placeholder="name@rathinam.in or your email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (sessionExpired) setSessionExpired(false);
+                }}
                 className="
                   w-full
                   rounded-xl
@@ -119,7 +124,7 @@ function Login() {
                   px-4
                   py-3
                   text-white
-                  placeholder-gray-300
+                  placeholder-white/50
                   outline-none
                   focus:ring-2
                   focus:ring-blue-400
@@ -139,9 +144,12 @@ function Login() {
 
               <input
                 type="password"
-                placeholder="Enter your password"
+                placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (sessionExpired) setSessionExpired(false);
+                }}
                 className="
                   w-full
                   rounded-xl

@@ -8,13 +8,13 @@ function WelcomeBanner() {
   const userName = user?.name ? user.name.split(" ")[0] : "Student";
 
   return (
-    <div className="rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-10 shadow-lg">
+    <div className="rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 sm:p-10 shadow-lg">
 
-      <p className="text-lg">
+      <p className="text-base sm:text-lg">
         Welcome Back, {userName} 👋
       </p>
 
-      <h1 className="text-4xl font-bold mt-3">
+      <h1 className="text-2xl sm:text-4xl font-bold mt-2 sm:mt-3">
         TeamMate Finder
       </h1>
 

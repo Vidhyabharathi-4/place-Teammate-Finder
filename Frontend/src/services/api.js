@@ -29,7 +29,11 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    const url = error.config?.url || "";
+    const isAuthAttempt =
+      url.includes("/api/auth/login") || url.includes("/api/auth/register");
+
+    if (error.response && error.response.status === 401 && !isAuthAttempt) {
       console.warn("Session expired or unauthorized. Clearing token.");
       localStorage.removeItem("access_token");
       const path = window.location.pathname;
