@@ -23,7 +23,12 @@ from app.api.team import router as team_router
 from app.api.application import router as application_router
 
 # Create Database Tables
-Base.metadata.create_all(bind=engine)
+try:
+    print("Verifying database tables on startup...")
+    Base.metadata.create_all(bind=engine)
+    print("Database tables initialized successfully.")
+except Exception as e:
+    print(f"Warning: Database initialization error on startup: {e}")
 
 app = FastAPI(
     title="TeamMate Finder API",
