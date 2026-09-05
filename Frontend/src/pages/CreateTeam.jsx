@@ -45,14 +45,14 @@ function CreateTeam() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 bg-white shadow-lg rounded-xl p-8">
+    <div className="max-w-3xl mx-auto mt-10 bg-white dark:bg-slate-800 shadow-lg rounded-2xl border border-slate-200 dark:border-slate-700 p-8">
 
-      <h1 className="text-3xl font-bold text-blue-600 mb-6">
+      <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-6">
         Create New Team
       </h1>
 
       {error && (
-        <div className="bg-red-100 text-red-700 p-3 rounded mb-4">
+        <div className="bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 p-4 rounded-xl mb-4">
           {error}
         </div>
       )}
@@ -60,7 +60,7 @@ function CreateTeam() {
       <form onSubmit={handleSubmit} className="space-y-5">
 
         <div>
-          <label className="block font-semibold mb-2">
+          <label className="block font-semibold mb-2 text-slate-700 dark:text-slate-200">
             Team Name
           </label>
 
@@ -68,13 +68,13 @@ function CreateTeam() {
             type="text"
             value={teamName}
             onChange={(e) => setTeamName(e.target.value)}
-            className="w-full border rounded-lg p-3"
+            className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 p-3 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
 
         <div>
-          <label className="block font-semibold mb-2">
+          <label className="block font-semibold mb-2 text-slate-700 dark:text-slate-200">
             Description
           </label>
 
@@ -82,13 +82,13 @@ function CreateTeam() {
             rows="4"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full border rounded-lg p-3"
+            className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 p-3 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
 
         <div>
-          <label className="block font-semibold mb-2">
+          <label className="block font-semibold mb-2 text-slate-700 dark:text-slate-200">
             Required Skills
           </label>
 
@@ -97,13 +97,13 @@ function CreateTeam() {
             value={requiredSkills}
             onChange={(e) => setRequiredSkills(e.target.value)}
             placeholder="Example: React, FastAPI, SQL"
-            className="w-full border rounded-lg p-3"
+            className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 p-3 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
 
         <div>
-          <label className="block font-semibold mb-2">
+          <label className="block font-semibold mb-2 text-slate-700 dark:text-slate-200">
             Maximum Members
           </label>
 
@@ -112,7 +112,7 @@ function CreateTeam() {
             min="2"
             value={maxMembers}
             onChange={(e) => setMaxMembers(e.target.value)}
-            className="w-full border rounded-lg p-3"
+            className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 p-3 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
@@ -120,7 +120,7 @@ function CreateTeam() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold"
+          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white py-3 rounded-xl font-semibold transition"
         >
           {loading ? "Creating Team..." : "Create Team"}
         </button>

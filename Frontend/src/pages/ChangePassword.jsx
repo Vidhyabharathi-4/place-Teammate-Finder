@@ -72,7 +72,7 @@ function ChangePassword() {
     toggle
   ) => (
     <div>
-      <label className="mb-2 block font-medium text-slate-700">
+      <label className="mb-2 block font-medium text-slate-700 dark:text-slate-200">
         {label}
       </label>
 
@@ -83,13 +83,13 @@ function ChangePassword() {
           value={value}
           onChange={handleChange}
           required
-          className="w-full rounded-xl border border-slate-300 px-4 py-3 pr-12 outline-none focus:border-blue-500"
+          className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-3 pr-12 text-slate-800 dark:text-white outline-none focus:border-blue-500 dark:focus:border-blue-400"
         />
 
         <button
           type="button"
           onClick={toggle}
-          className="absolute right-4 top-1/2 -translate-y-1/2"
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition"
         >
           {show ? (
             <EyeOff size={20} />
@@ -104,7 +104,7 @@ function ChangePassword() {
   return (
     <div className="mx-auto max-w-2xl p-8">
 
-      <div className="rounded-3xl bg-white shadow-lg border border-slate-200">
+      <div className="rounded-3xl bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700">
 
         <div className="rounded-t-3xl bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-white">
 

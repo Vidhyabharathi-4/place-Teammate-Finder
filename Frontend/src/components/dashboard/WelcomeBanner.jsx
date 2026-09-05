@@ -1,13 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function WelcomeBanner() {
+  const { user } = useAuth();
+  const userName = user?.name ? user.name.split(" ")[0] : "Student";
+
   return (
     <div className="rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-10 shadow-lg">
 
       <p className="text-lg">
-        Welcome Back 👋
+        Welcome Back, {userName} 👋
       </p>
 
       <h1 className="text-4xl font-bold mt-3">

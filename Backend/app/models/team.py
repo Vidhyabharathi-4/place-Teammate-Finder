@@ -4,10 +4,13 @@ from sqlalchemy import String
 from sqlalchemy import Text
 from sqlalchemy import DateTime
 from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 
 from sqlalchemy.sql import func
 
 from app.db.database import Base
+from app.models.user import User
+from app.models.team_member import TeamMember
 
 
 class Team(Base):
@@ -93,3 +96,30 @@ class Team(Base):
         onupdate=func.now(),
         nullable=False
     )
+
+    owner = relationship("User", foreign_keys=[owner_id])
+    members = relationship("TeamMember", backref="team", cascade="all, delete-orphan")
+
+    @property
+    def owner_name(self) -> str | None:
+        return self.owner.name if self.owner else None
+
+    @property
+    def owner_email(self) -> str | None:
+        return self.owner.college_email if self.owner else None
+
+    @property
+    def owner_department(self) -> str | None:
+        return self.owner.department if self.owner else None
+
+    @property
+    def owner_specialization(self) -> str | None:
+        return self.owner.specialization if self.owner else None
+
+    @property
+    def current_members(self) -> int:
+        return len(self.members) if self.members else 1
+
+    @property
+    def members_needed(self) -> int:
+        return max(0, self.max_members - self.current_members)

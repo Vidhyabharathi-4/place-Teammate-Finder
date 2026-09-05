@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel
 from pydantic import EmailStr
@@ -13,6 +14,8 @@ class UserRegister(BaseModel):
     register_number: str
     college_email: EmailStr
     password: str
+    specialization: Optional[str] = None
+    role: Optional[str] = "Student"
 
 
 # ----------------------------------
@@ -52,6 +55,8 @@ class UserResponse(BaseModel):
     name: str
     register_number: str
     college_email: EmailStr
+    specialization: Optional[str] = None
+    role: Optional[str] = "Student"
     created_at: datetime
 
     class Config:

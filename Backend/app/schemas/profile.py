@@ -12,6 +12,8 @@ class ProfileResponse(BaseModel):
 
     department: Optional[str] = None
     year: Optional[int] = None
+    specialization: Optional[str] = None
+    role: Optional[str] = "Student"
 
     about_me: Optional[str] = None
     skills: Optional[str] = None
@@ -21,6 +23,10 @@ class ProfileResponse(BaseModel):
     portfolio_url: Optional[HttpUrl] = None
 
     profile_picture: Optional[str] = None
+
+    teams_created: Optional[int] = 0
+    teams_joined: Optional[int] = 0
+    profile_completion: Optional[int] = 0
 
     created_at: datetime
     updated_at: datetime
@@ -34,6 +40,7 @@ class ProfileUpdate(BaseModel):
 
     department: Optional[str] = None
     year: Optional[int] = None
+    specialization: Optional[str] = None
 
     about_me: Optional[str] = None
     skills: Optional[str] = None

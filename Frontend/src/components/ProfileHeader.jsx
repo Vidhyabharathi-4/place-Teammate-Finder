@@ -6,9 +6,11 @@ import {
   Pencil,
   Star,
   Camera,
+  Award,
 } from "lucide-react";
 
 import profileService from "../services/profileService";
+import { getImageUrl } from "../utils/imageUrl";
 
 function ProfileHeader({ profile, onEdit, onProfileUpdated }) {
   const fileInputRef = useRef(null);
@@ -37,12 +39,10 @@ function ProfileHeader({ profile, onEdit, onProfileUpdated }) {
     }
   };
 
-  const imageUrl = profile.profile_picture
-    ? `http://localhost:8000${profile.profile_picture}`
-    : null;
+  const imageUrl = getImageUrl(profile?.profile_picture);
 
   return (
-    <div className="overflow-hidden rounded-3xl bg-white shadow-xl border border-slate-200">
+    <div className="overflow-hidden rounded-3xl bg-white shadow-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800">
 
       {/* Hidden File Input */}
       <input
@@ -61,7 +61,7 @@ function ProfileHeader({ profile, onEdit, onProfileUpdated }) {
           <div className="flex items-center gap-2 text-white">
             <Star size={18} fill="white" />
             <span className="font-bold text-lg">
-              {profile.profile_score || 75}% Profile Score
+              {profile?.profile_completion ?? 20}% Profile Score
             </span>
           </div>
         </div>
@@ -94,25 +94,32 @@ function ProfileHeader({ profile, onEdit, onProfileUpdated }) {
           {/* Name */}
           <div>
             <h1 className="text-4xl font-black tracking-tight text-white drop-shadow-lg">
-              {profile.name}
+              {profile?.name}
             </h1>
 
             <div className="mt-4 flex flex-wrap gap-3">
               <div className="flex items-center gap-2 rounded-full bg-white/20 backdrop-blur-lg px-4 py-2 text-white">
                 <GraduationCap size={18} />
                 <span className="font-medium">
-                  {profile.department || "Department"}
+                  {profile?.department || "Department"}
                 </span>
               </div>
 
               <div className="flex items-center gap-2 rounded-full bg-green-500/30 backdrop-blur-lg px-4 py-2 text-white">
                 <Calendar size={18} />
                 <span className="font-medium">
-                  {profile.year
+                  {profile?.year
                     ? `${profile.year} Year`
                     : "Year"}
                 </span>
               </div>
+
+              {profile?.specialization && (
+                <div className="flex items-center gap-2 rounded-full bg-yellow-400/30 backdrop-blur-lg px-4 py-2 text-white font-medium border border-yellow-300/40">
+                  <Award size={18} />
+                  <span>{profile.specialization}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -121,10 +128,10 @@ function ProfileHeader({ profile, onEdit, onProfileUpdated }) {
       {/* Bottom */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between px-10 py-6">
 
-        <div className="flex items-center gap-3 text-slate-600">
+        <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
           <Mail size={20} />
           <span className="text-lg">
-            {profile.college_email}
+            {profile?.college_email}
           </span>
         </div>
 

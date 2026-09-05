@@ -43,7 +43,7 @@ return(
 
 <Card>
 
-<h2 className="font-bold text-xl mb-5">
+<h2 className="font-bold text-xl mb-5 text-slate-800 dark:text-white">
 
 Quick Actions
 
@@ -65,7 +65,7 @@ key={action.title}
 
 to={action.link}
 
-className="flex items-center gap-4 p-4 rounded-xl hover:bg-slate-100 transition"
+className="flex items-center gap-4 p-4 rounded-xl text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700/60 transition"
 
 >
 

@@ -22,9 +22,20 @@ class AuthService:
         user_data: UserRegister,
         db: Session
     ):
+        email_clean = user_data.college_email.strip().lower()
+        role = (user_data.role or "Student").strip()
+
+        # Email domain validation:
+        # Students MUST use a @rathinam.in email address.
+        # Staff can use ANY email address (e.g. @gmail.com, @rathinam.in, etc.)
+        if role.lower() == "student":
+            if not email_clean.endswith("@rathinam.in"):
+                raise ValueError(
+                    "Student email must end with @rathinam.in"
+                )
 
         existing_email = db.query(User).filter(
-            User.college_email == user_data.college_email
+            User.college_email == email_clean
         ).first()
 
         if existing_email:
@@ -44,7 +55,9 @@ class AuthService:
         user = User(
             name=user_data.name,
             register_number=user_data.register_number,
-            college_email=user_data.college_email,
+            college_email=email_clean,
+            specialization=user_data.specialization,
+            role=role,
             password_hash=hash_password(
                 user_data.password
             )
@@ -62,19 +75,24 @@ class AuthService:
         password: str,
         db: Session
     ):
+        email_clean = email.strip().lower()
 
         user = db.query(User).filter(
-            User.college_email == email
+            User.college_email == email_clean
         ).first()
 
         if not user:
-            return None
+            raise ValueError(
+                "No account found with this email. Please register first."
+            )
 
         if not verify_password(
             password,
             user.password_hash
         ):
-            return None
+            raise ValueError(
+                "Incorrect password. Please try again."
+            )
 
         access_token = create_access_token(
             {

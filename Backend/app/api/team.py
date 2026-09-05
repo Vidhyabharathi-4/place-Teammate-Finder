@@ -65,14 +65,22 @@ def create_team(
     response_model=list[TeamResponse]
 )
 def get_all_teams(
-    search:Optional[str] = None,
-    category:Optional[str] = None,
-    status:Optional[str] = None,
+    search: Optional[str] = None,
+    specialization: Optional[str] = None,
+    department: Optional[str] = None,
+    year: Optional[int] = None,
+    skills: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
 
     return TeamService.search_teams(
         search=search,
+        specialization=specialization,
+        department=department,
+        year=year,
+        skills=skills,
         category=category,
         status=status,
         db=db

@@ -12,7 +12,8 @@ from app.dependencies.auth_dependency import (
 )
 
 from app.schemas.dashboard import (
-    DashboardStats
+    DashboardStats,
+    DashboardEvent
 )
 
 from app.services.dashboard_service import (
@@ -38,3 +39,13 @@ def dashboard_stats(
         current_user,
         db
     )
+
+
+@router.get(
+    "/events",
+    response_model=list[DashboardEvent]
+)
+def dashboard_events(
+    db: Session = Depends(get_db)
+):
+    return DashboardService.get_upcoming_events(db)

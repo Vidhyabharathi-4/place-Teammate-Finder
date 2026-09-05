@@ -11,6 +11,9 @@ function Card({ children, className = "" }) {
         transition-all
         duration-300
         hover:shadow-lg
+        dark:border-slate-700
+        dark:bg-slate-800
+        dark:text-white
         ${className}
       `}
     >
@@ -25,7 +28,7 @@ function CardHeader({ children, className = "" }) {
 
 function CardTitle({ children, className = "" }) {
   return (
-    <h3 className={`text-lg font-semibold ${className}`}>
+    <h3 className={`text-lg font-semibold text-slate-800 dark:text-white ${className}`}>
       {children}
     </h3>
   );

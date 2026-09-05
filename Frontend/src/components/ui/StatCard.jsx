@@ -13,11 +13,11 @@ function StatCard({
 
         <div>
 
-          <p className="text-slate-500">
+          <p className="text-slate-500 dark:text-slate-400">
             {title}
           </p>
 
-          <h1 className="text-4xl font-bold mt-2">
+          <h1 className="text-4xl font-bold mt-2 text-slate-800 dark:text-white">
             {value}
           </h1>
 

@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import backgroundImage from "../assets/RTC-1 PIC.webp";
 import { login } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const sessionExpired = searchParams.get("expired") === "1";
+  const { loginUser } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,16 +23,22 @@ function Login() {
     setError("");
 
     try {
-      const data = await login(email, password);
+      const data = await login(email.trim(), password);
 
-      localStorage.setItem("access_token", data.access_token);
+      await loginUser(data.access_token);
 
       navigate("/dashboard");
     } catch (err) {
-      setError(
-        err.response?.data?.detail ||
-        "Login failed."
-      );
+      if (!err.response) {
+        setError(
+          "Cannot connect to the backend server. Please make sure the FastAPI server is running on port 8000."
+        );
+      } else {
+        setError(
+          err.response?.data?.detail ||
+          "Login failed. Please check your email and password."
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -72,9 +82,17 @@ function Login() {
 
           </div>
 
+          {/* Session Expired Notice */}
+          {sessionExpired && (
+            <div className="bg-amber-500/20 border border-amber-400 text-amber-100 rounded-xl p-3 mb-5 text-sm flex items-center gap-2">
+              <span>⚠️</span>
+              <span>Your previous session has expired. Please sign in again.</span>
+            </div>
+          )}
+
           {/* Error */}
           {error && (
-            <div className="bg-red-500/20 border border-red-400 text-red-100 rounded-lg p-3 mb-5">
+            <div className="bg-red-500/20 border border-red-400 text-red-100 rounded-lg p-3 mb-5 text-sm">
               {error}
             </div>
           )}
@@ -84,12 +102,12 @@ function Login() {
 
             <div>
               <label className="text-white text-sm font-medium mb-2 block">
-                College Email
+                Email Address (Student or Staff)
               </label>
 
               <input
                 type="email"
-                placeholder="Enter your college email"
+                placeholder="name@rathinam.in or your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="
@@ -109,6 +127,9 @@ function Login() {
                 "
                 required
               />
+              <p className="text-xs text-gray-300 mt-1.5">
+                Students: @rathinam.in &bull; Staff: Any email acceptable
+              </p>
             </div>
 
             <div>
@@ -153,6 +174,7 @@ function Login() {
                 font-semibold
                 py-3
                 shadow-lg
+                disabled:opacity-60
               "
             >
               {loading ? "Logging in..." : "Login"}

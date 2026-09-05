@@ -43,6 +43,7 @@ class TeamMemberService:
                 "college_email": user.college_email,
                 "department": user.department,
                 "year": user.year,
+                "specialization": user.specialization,
                 "skills": user.skills,
                 "profile_picture": user.profile_picture,
                 "role": member.role,

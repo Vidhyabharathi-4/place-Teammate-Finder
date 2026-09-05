@@ -62,20 +62,18 @@ def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
-    token = AuthService.login_user(
-        form_data.username,
-        form_data.password,
-        db
-    )
-
-    if not token:
-
+    try:
+        token = AuthService.login_user(
+            form_data.username,
+            form_data.password,
+            db
+        )
+        return token
+    except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password"
+            detail=str(e)
         )
-
-    return token
 
 
 @router.get(

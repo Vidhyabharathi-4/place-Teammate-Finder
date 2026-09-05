@@ -80,3 +80,35 @@ class Application(Base):
     )
 
     team = relationship("Team")
+
+    @property
+    def team_name(self) -> str | None:
+        return self.team.team_name if self.team else None
+
+    @property
+    def applicant_name(self) -> str | None:
+        return self.applicant.name if self.applicant else None
+
+    @property
+    def applicant_email(self) -> str | None:
+        return self.applicant.college_email if self.applicant else None
+
+    @property
+    def applicant_department(self) -> str | None:
+        return self.applicant.department if self.applicant else None
+
+    @property
+    def applicant_year(self) -> int | None:
+        return self.applicant.year if self.applicant else None
+
+    @property
+    def applicant_specialization(self) -> str | None:
+        return self.applicant.specialization if self.applicant else None
+
+    @property
+    def applicant_skills(self) -> str | None:
+        return self.applicant.skills if self.applicant else None
+
+    @property
+    def applicant_profile_picture(self) -> str | None:
+        return self.applicant.profile_picture if self.applicant else None

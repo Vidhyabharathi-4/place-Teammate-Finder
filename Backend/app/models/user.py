@@ -57,6 +57,17 @@ class User(Base):
         nullable=True
     )
 
+    specialization = Column(
+        String(100),
+        nullable=True
+    )
+
+    role = Column(
+        String(50),
+        default="Student",
+        nullable=False
+    )
+
     about_me = Column(
         Text,
         nullable=True
@@ -123,5 +134,4 @@ class User(Base):
         DateTime(timezone=True),
         server_default=func.now(),
         onupdate=func.now(),
-        nullable=False
-    )
+    )

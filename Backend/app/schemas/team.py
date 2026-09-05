@@ -57,5 +57,13 @@ class TeamResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+    owner_name: Optional[str] = None
+    owner_email: Optional[str] = None
+    owner_department: Optional[str] = None
+    owner_specialization: Optional[str] = None
+
+    current_members: Optional[int] = None
+    members_needed: Optional[int] = None
+
     class Config:
         from_attributes = True

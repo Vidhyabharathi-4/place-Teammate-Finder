@@ -1,8 +1,8 @@
 import api from "./api";
 
-// Get all available teams
-const getAllTeams = async () => {
-  const response = await api.get("/api/teams");
+// Get all available teams with optional filter parameters
+const getAllTeams = async (params = {}) => {
+  const response = await api.get("/api/teams", { params });
   return response.data;
 };
 

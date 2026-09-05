@@ -10,6 +10,7 @@ class TeamMemberResponse(BaseModel):
     college_email: str
     department: Optional[str] = None
     year: Optional[int] = None
+    specialization: Optional[str] = None
     skills: Optional[str] = None
     profile_picture: Optional[str] = None
     role: str

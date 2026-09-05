@@ -64,7 +64,7 @@ function TeamDetails() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-96 text-xl font-semibold">
+      <div className="flex justify-center items-center h-96 text-xl font-semibold text-slate-700 dark:text-slate-200">
         Loading Team...
       </div>
     );
@@ -72,7 +72,7 @@ function TeamDetails() {
 
   if (!team) {
     return (
-      <div className="flex justify-center items-center h-96 text-xl">
+      <div className="flex justify-center items-center h-96 text-xl text-slate-700 dark:text-slate-200">
         Team not found.
       </div>
     );
@@ -85,11 +85,24 @@ function TeamDetails() {
 
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl text-white p-8 shadow-lg">
 
-        <h1 className="text-4xl font-bold">
-          {team.team_name}
-        </h1>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h1 className="text-4xl font-bold">
+            {team.team_name}
+          </h1>
 
-        <p className="mt-4 text-blue-100">
+          <div className="flex items-center gap-2">
+            {team.category && (
+              <span className="bg-white/20 backdrop-blur-md px-3.5 py-1 rounded-full text-sm font-medium">
+                {team.category}
+              </span>
+            )}
+            <span className="bg-green-500/80 px-3.5 py-1 rounded-full text-sm font-semibold">
+              {team.status || "Open"}
+            </span>
+          </div>
+        </div>
+
+        <p className="mt-4 text-blue-100 max-w-2xl">
           {team.description}
         </p>
 
@@ -98,13 +111,13 @@ function TeamDetails() {
       {/* Alerts */}
 
       {error && (
-        <div className="mt-6 rounded-xl bg-red-100 text-red-700 p-4">
+        <div className="mt-6 rounded-xl bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 p-4 border border-red-200 dark:border-red-800">
           {error}
         </div>
       )}
 
       {success && (
-        <div className="mt-6 rounded-xl bg-green-100 text-green-700 p-4">
+        <div className="mt-6 rounded-xl bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 p-4 border border-green-200 dark:border-green-800">
           {success}
         </div>
       )}
@@ -113,57 +126,62 @@ function TeamDetails() {
 
       <div className="grid md:grid-cols-2 gap-6 mt-8">
 
-        <div className="bg-white rounded-2xl shadow border p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
 
-          <h2 className="text-2xl font-bold mb-5">
+          <h2 className="text-2xl font-bold mb-5 text-slate-800 dark:text-white">
             Team Information
           </h2>
 
           <div className="space-y-5">
 
             <div className="flex gap-3">
-              <Code className="text-blue-600 mt-1" />
+              <Code className="text-blue-600 dark:text-blue-400 mt-1 shrink-0" />
               <div>
-                <h3 className="font-semibold">
+                <h3 className="font-semibold text-slate-800 dark:text-white">
                   Required Skills
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-slate-600 dark:text-slate-300">
                   {team.required_skills || "Not specified"}
                 </p>
               </div>
             </div>
 
             <div className="flex gap-3">
-              <Users className="text-green-600 mt-1" />
+              <Users className="text-green-600 dark:text-green-400 mt-1 shrink-0" />
               <div>
-                <h3 className="font-semibold">
-                  Maximum Members
+                <h3 className="font-semibold text-slate-800 dark:text-white">
+                  Team Capacity
                 </h3>
-                <p className="text-gray-600">
-                  {team.max_members}
+                <p className="text-slate-600 dark:text-slate-300">
+                  {team.current_members || 1} / {team.max_members} members ({team.members_needed !== undefined ? team.members_needed : Math.max(0, team.max_members - (team.current_members || 1))} needed)
                 </p>
               </div>
             </div>
 
             <div className="flex gap-3">
-              <User className="text-purple-600 mt-1" />
+              <User className="text-purple-600 dark:text-purple-400 mt-1 shrink-0" />
               <div>
-                <h3 className="font-semibold">
+                <h3 className="font-semibold text-slate-800 dark:text-white">
                   Team Owner
                 </h3>
-                <p className="text-gray-600">
-                  {team.owner_id}
+                <p className="text-slate-600 dark:text-slate-300 font-medium">
+                  {team.owner_name || `User #${team.owner_id}`}
                 </p>
+                {team.owner_department && (
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    {team.owner_department} {team.owner_specialization ? `• ${team.owner_specialization}` : ""}
+                  </p>
+                )}
               </div>
             </div>
 
             <div className="flex gap-3">
-              <Calendar className="text-orange-600 mt-1" />
+              <Calendar className="text-orange-600 dark:text-orange-400 mt-1 shrink-0" />
               <div>
-                <h3 className="font-semibold">
+                <h3 className="font-semibold text-slate-800 dark:text-white">
                   Created On
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-slate-600 dark:text-slate-300">
                   {new Date(team.created_at).toLocaleDateString()}
                 </p>
               </div>
@@ -175,13 +193,13 @@ function TeamDetails() {
 
         {/* Application Card */}
 
-        <div className="bg-white rounded-2xl shadow border p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
 
-          <h2 className="text-2xl font-bold mb-5">
+          <h2 className="text-2xl font-bold mb-5 text-slate-800 dark:text-white">
             Apply to Join
           </h2>
 
-          <label className="font-medium">
+          <label className="block font-medium text-slate-700 dark:text-slate-200">
             Why do you want to join this team?
           </label>
 
@@ -190,13 +208,13 @@ function TeamDetails() {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Write your application..."
-            className="w-full mt-3 rounded-xl border p-4 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full mt-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 p-4 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
 
           <button
             onClick={handleApply}
             disabled={applying}
-            className="mt-6 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-xl font-semibold flex justify-center items-center gap-2"
+            className="mt-6 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 dark:disabled:bg-slate-600 text-white py-3 rounded-xl font-semibold flex justify-center items-center gap-2 transition"
           >
             <Send size={18} />
 

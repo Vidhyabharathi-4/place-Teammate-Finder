@@ -25,7 +25,7 @@ function SettingsPage() {
       title: "Change Password",
       icon: <Lock size={30} />,
       desc: "Update your account password securely.",
-      color: "bg-blue-100 text-blue-600",
+      color: "bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400",
       onClick: () => navigate("/change-password"),
     },
 
@@ -33,7 +33,7 @@ function SettingsPage() {
       title: "Notification Preferences",
       icon: <Bell size={30} />,
       desc: "Control alerts, invitations and application updates.",
-      color: "bg-yellow-100 text-yellow-600",
+      color: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/40 dark:text-yellow-400",
       onClick: () => navigate("/notification-settings"),
     },
 
@@ -41,7 +41,7 @@ function SettingsPage() {
       title: "About TeamMate Finder",
       icon: <Info size={30} />,
       desc: "Version, privacy policy and support information.",
-      color: "bg-green-100 text-green-600",
+      color: "bg-green-100 text-green-600 dark:bg-green-900/40 dark:text-green-400",
       onClick: () => navigate("/about"),
     },
   ];

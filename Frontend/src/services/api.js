@@ -1,7 +1,12 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000",
+  baseURL:
+    import.meta.env.VITE_API_URL !== undefined
+      ? import.meta.env.VITE_API_URL
+      : import.meta.env.PROD
+      ? ""
+      : "http://127.0.0.1:8000",
 });
 
 api.interceptors.request.use((config) => {
@@ -20,5 +25,20 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      console.warn("Session expired or unauthorized. Clearing token.");
+      localStorage.removeItem("access_token");
+      const path = window.location.pathname;
+      if (path !== "/" && path !== "/register") {
+        window.location.href = "/?expired=1";
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default api;
