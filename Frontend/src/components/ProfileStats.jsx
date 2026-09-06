@@ -45,7 +45,7 @@ function ProfileStats({ profile }) {
   ];
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
       {stats.map((item) => {
         const Icon = item.icon;
 
@@ -54,26 +54,26 @@ function ProfileStats({ profile }) {
             key={item.title}
             className={`
               group
-              rounded-3xl
+              rounded-2xl sm:rounded-3xl
               border
               ${item.border}
               bg-white
               dark:bg-slate-800
-              p-6
+              p-4 sm:p-6
               shadow-sm
               transition-all
               duration-300
               hover:-translate-y-1
-              hover:shadow-xl
+              hover:shadow-md
             `}
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-500 dark:text-slate-400">
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
                   {item.title}
                 </p>
 
-                <h2 className="mt-3 text-4xl font-bold text-slate-800 dark:text-white">
+                <h2 className="mt-1 sm:mt-2 text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-white tracking-tight">
                   {item.value}
                 </h2>
               </div>
@@ -83,16 +83,17 @@ function ProfileStats({ profile }) {
                   ${item.iconBg}
                   ${item.iconColor}
                   flex
-                  h-16
-                  w-16
+                  h-11 w-11 sm:h-14 sm:w-14
                   items-center
                   justify-center
-                  rounded-2xl
+                  rounded-xl sm:rounded-2xl
                   transition
-                  group-hover:scale-110
+                  group-hover:scale-105
+                  shrink-0
+                  ml-2
                 `}
               >
-                <Icon size={30} />
+                <Icon size={22} className="sm:w-7 sm:h-7" />
               </div>
             </div>
           </div>

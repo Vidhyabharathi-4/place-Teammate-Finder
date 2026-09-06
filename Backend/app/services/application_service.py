@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.models.application import Application
 from app.models.team import Team
 from app.models.team_member import TeamMember
+from app.models.user import User
 
 from app.schemas.application import (
     ApplicationCreate,
@@ -62,17 +63,20 @@ class ApplicationService:
         db.refresh(application)
 
         # Notify Team Owner
-        applicant = db.query(User).filter(User.id == applicant_id).first()
-        applicant_name = applicant.name if applicant else "A student"
-        applicant_dept = f" ({applicant.department})" if applicant and applicant.department else ""
+        try:
+            applicant = db.query(User).filter(User.id == applicant_id).first()
+            applicant_name = applicant.name if applicant else "A student"
+            applicant_dept = f" ({applicant.department})" if applicant and applicant.department else ""
 
-        NotificationService.create_notification(
-            user_id=team.owner_id,
-            title="New Team Application",
-            message=f"{applicant_name}{applicant_dept} applied to join '{team.team_name}'.",
-            notification_type="APPLICATION",
-            db=db
-        )
+            NotificationService.create_notification(
+                user_id=team.owner_id,
+                title="New Team Application",
+                message=f"{applicant_name}{applicant_dept} applied to join '{team.team_name}'.",
+                notification_type="APPLICATION",
+                db=db
+            )
+        except Exception as notify_err:
+            print(f"Warning: Failed to create notification: {notify_err}")
 
         return application
 

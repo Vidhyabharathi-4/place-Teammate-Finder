@@ -11,9 +11,11 @@ import {
 
 import teamService from "../services/teamService";
 import applicationService from "../services/applicationService";
+import { useAuth } from "../context/AuthContext";
 
 function TeamDetails() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { id } = useParams();
 
   const [team, setTeam] = useState(null);
@@ -202,37 +204,62 @@ function TeamDetails() {
 
         </div>
 
-        {/* Application Card */}
+        {/* Application Card / Owner Card */}
 
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+        {user && user.id === team.owner_id ? (
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex flex-col justify-center items-center text-center">
+            <div className="w-14 h-14 rounded-2xl bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-300 flex items-center justify-center mb-4 text-2xl font-bold">
+              👑
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white mb-2">
+              You own this team
+            </h2>
+            <p className="text-slate-500 dark:text-slate-400 text-sm max-w-sm mb-6">
+              You created this team. Manage incoming member applications and team members below.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
+              <button
+                onClick={() => navigate(`/applications/${team.id}`)}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold text-sm transition shadow-sm"
+              >
+                Review Applications
+              </button>
+              <button
+                onClick={() => navigate(`/teams/${team.id}/members`)}
+                className="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-white px-5 py-3 rounded-xl font-semibold text-sm transition"
+              >
+                View Team Members
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+            <h2 className="text-2xl font-bold mb-5 text-slate-800 dark:text-white">
+              Apply to Join
+            </h2>
 
-          <h2 className="text-2xl font-bold mb-5 text-slate-800 dark:text-white">
-            Apply to Join
-          </h2>
+            <label className="block font-medium text-slate-700 dark:text-slate-200">
+              Why do you want to join this team?
+            </label>
 
-          <label className="block font-medium text-slate-700 dark:text-slate-200">
-            Why do you want to join this team?
-          </label>
+            <textarea
+              rows={6}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Tell the team leader about your experience, skills, and why you'd like to collaborate..."
+              className="w-full mt-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 p-4 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
+            />
 
-          <textarea
-            rows={8}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Write your application..."
-            className="w-full mt-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 p-4 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-400 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-
-          <button
-            onClick={handleApply}
-            disabled={applying}
-            className="mt-6 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 dark:disabled:bg-slate-600 text-white py-3 rounded-xl font-semibold flex justify-center items-center gap-2 transition"
-          >
-            <Send size={18} />
-
-            {applying ? "Submitting..." : "Apply Now"}
-          </button>
-
-        </div>
+            <button
+              onClick={handleApply}
+              disabled={applying || !message.trim()}
+              className="mt-5 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 dark:disabled:bg-slate-600 text-white py-3 rounded-xl font-semibold flex justify-center items-center gap-2 transition shadow-sm text-sm sm:text-base"
+            >
+              <Send size={18} />
+              <span>{applying ? "Submitting Application..." : "Submit Application"}</span>
+            </button>
+          </div>
+        )}
 
       </div>
 
