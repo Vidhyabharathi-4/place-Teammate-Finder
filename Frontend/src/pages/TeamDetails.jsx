@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Users,
   Code,
   Calendar,
   User,
   Send,
+  ArrowLeft,
 } from "lucide-react";
 
 import teamService from "../services/teamService";
 import applicationService from "../services/applicationService";
 
 function TeamDetails() {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [team, setTeam] = useState(null);
@@ -80,6 +82,15 @@ function TeamDetails() {
 
   return (
     <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition mb-4 sm:mb-6"
+      >
+        <ArrowLeft size={18} />
+        Back to Teams
+      </button>
 
       {/* Header */}
 

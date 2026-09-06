@@ -27,6 +27,10 @@ router = APIRouter(
 
 
 @router.get(
+    "",
+    response_model=list[NotificationResponse]
+)
+@router.get(
     "/",
     response_model=list[NotificationResponse]
 )
@@ -55,6 +59,15 @@ def unread_count(
     return {
         "count": count
     }
+
+
+@router.put("/read-all")
+def mark_all_as_read(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    NotificationService.mark_all_as_read(current_user.id, db)
+    return {"message": "All notifications marked as read."}
 
 
 @router.put(

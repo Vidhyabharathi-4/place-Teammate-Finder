@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import backgroundImage from "../assets/RTC-1 PIC.webp";
 import { login } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
@@ -14,6 +15,7 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -142,31 +144,42 @@ function Login() {
                 Password
               </label>
 
-              <input
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  if (sessionExpired) setSessionExpired(false);
-                }}
-                className="
-                  w-full
-                  rounded-xl
-                  bg-white/15
-                  border
-                  border-white/20
-                  px-4
-                  py-3
-                  text-white
-                  placeholder-gray-300
-                  outline-none
-                  focus:ring-2
-                  focus:ring-blue-400
-                  transition
-                "
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (sessionExpired) setSessionExpired(false);
+                  }}
+                  className="
+                    w-full
+                    rounded-xl
+                    bg-white/15
+                    border
+                    border-white/20
+                    pl-4
+                    pr-12
+                    py-3
+                    text-white
+                    placeholder-gray-300
+                    outline-none
+                    focus:ring-2
+                    focus:ring-blue-400
+                    transition
+                  "
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-300 hover:text-white p-1 focus:outline-none transition"
+                  title={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
             </div>
 
             <button

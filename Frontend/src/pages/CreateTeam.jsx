@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 import teamService from "../services/teamService";
 
@@ -28,8 +29,6 @@ function CreateTeam() {
         max_members: Number(maxMembers),
       });
 
-      alert("Team created successfully.");
-
       navigate("/my-teams");
 
     } catch (err) {
@@ -45,9 +44,18 @@ function CreateTeam() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 bg-white dark:bg-slate-800 shadow-lg rounded-2xl border border-slate-200 dark:border-slate-700 p-8">
+    <div className="max-w-3xl mx-auto my-4 sm:my-8 bg-white dark:bg-slate-800 shadow-lg rounded-3xl border border-slate-200 dark:border-slate-700 p-5 sm:p-8">
 
-      <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-6">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition mb-4 sm:mb-6"
+      >
+        <ArrowLeft size={18} />
+        Back to Teams
+      </button>
+
+      <h1 className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400 mb-6">
         Create New Team
       </h1>
 

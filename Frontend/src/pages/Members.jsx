@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Mail, GraduationCap, Code, Calendar, Award } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Mail, GraduationCap, Code, Calendar, Award, ArrowLeft } from "lucide-react";
 
 import teamService from "../services/teamService";
 import { getImageUrl } from "../utils/imageUrl";
 
 function Members() {
+  const navigate = useNavigate();
   const { teamId } = useParams();
 
   const [members, setMembers] = useState([]);
@@ -48,13 +49,21 @@ function Members() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-8">
+    <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition mb-4 sm:mb-6"
+      >
+        <ArrowLeft size={18} />
+        Back
+      </button>
 
-      <h1 className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+      <h1 className="text-2xl sm:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
         Team Members
       </h1>
 
-      <p className="text-gray-500 dark:text-slate-400 mb-8">
+      <p className="text-gray-500 dark:text-slate-400 mb-6 sm:mb-8 text-sm sm:text-base">
         Meet the members of your team.
       </p>
 

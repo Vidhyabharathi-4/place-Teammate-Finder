@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Users,
   FolderKanban,
@@ -15,6 +16,7 @@ import QuickActions from "../components/dashboard/QuickActions";
 import dashboardService from "../services/dashboardService";
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     total_teams: 0,
     teams_created: 0,
@@ -52,6 +54,7 @@ function Dashboard() {
           value={loading ? "..." : stats.total_teams}
           icon={Users}
           color="bg-blue-600"
+          onClick={() => navigate("/teams")}
         />
 
         <StatCard
@@ -59,6 +62,7 @@ function Dashboard() {
           value={loading ? "..." : stats.teams_created}
           icon={FolderKanban}
           color="bg-purple-600"
+          onClick={() => navigate("/my-teams")}
         />
 
         <StatCard
@@ -66,6 +70,7 @@ function Dashboard() {
           value={loading ? "..." : stats.teams_joined}
           icon={UserCheck}
           color="bg-green-600"
+          onClick={() => navigate("/my-teams")}
         />
 
         <StatCard
@@ -73,6 +78,7 @@ function Dashboard() {
           value={loading ? "..." : stats.pending_applications}
           icon={ClipboardList}
           color="bg-orange-500"
+          onClick={() => navigate("/applications")}
         />
 
       </div>

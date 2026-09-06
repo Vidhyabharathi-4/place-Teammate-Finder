@@ -4,9 +4,10 @@ import {
   Search,
   Settings,
   Menu,
+  ArrowLeft,
 } from "lucide-react";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import notificationService from "../services/notificationService";
 import groupLogo from "../assets/grp-logo.jpg";
@@ -14,6 +15,8 @@ import { getImageUrl } from "../utils/imageUrl";
 
 function Navbar({ onToggleSidebar }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isDashboard = location.pathname === "/dashboard";
   const { user } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,7 +58,7 @@ function Navbar({ onToggleSidebar }) {
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md shadow-xs transition-colors duration-300 dark:border-slate-700/80 dark:bg-slate-900/95">
       <div className="flex h-16 sm:h-20 items-center justify-between px-3 sm:px-6 lg:px-8">
         
-        {/* Left: Mobile Menu Button + Logo + Search */}
+        {/* Left: Mobile Menu Button + Back Arrow + Logo + Search */}
         <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
           {/* Hamburger Menu on Mobile */}
           <button
@@ -65,6 +68,19 @@ function Navbar({ onToggleSidebar }) {
           >
             <Menu size={22} />
           </button>
+
+          {/* Universal Back Arrow Button when navigating away from dashboard */}
+          {!isDashboard && (
+            <button
+              onClick={() => navigate(-1)}
+              className="flex items-center justify-center gap-1.5 rounded-xl p-2 text-slate-600 hover:bg-slate-100 hover:text-blue-600 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-blue-400 transition font-semibold text-xs sm:text-sm"
+              title="Go Back"
+              aria-label="Go Back"
+            >
+              <ArrowLeft size={20} />
+              <span className="hidden sm:inline">Back</span>
+            </button>
+          )}
 
           <img
             src={groupLogo}

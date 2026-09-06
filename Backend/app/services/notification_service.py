@@ -104,3 +104,15 @@ class NotificationService:
         print(f"Unread count for User {user_id}: {count}")
 
         return count
+
+    @staticmethod
+    def mark_all_as_read(
+        user_id: int,
+        db: Session
+    ):
+        db.query(Notification).filter(
+            Notification.user_id == user_id,
+            Notification.is_read == False
+        ).update({"is_read": True})
+        db.commit()
+        return True

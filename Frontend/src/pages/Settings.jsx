@@ -6,6 +6,7 @@ import {
   LogOut,
   Moon,
   Sun,
+  ArrowLeft,
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
@@ -52,19 +53,28 @@ function SettingsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl p-8">
+    <div className="mx-auto max-w-7xl px-3 sm:px-6 py-4 sm:py-8">
+
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/dashboard")}
+        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition mb-4 sm:mb-6"
+      >
+        <ArrowLeft size={18} />
+        Back to Dashboard
+      </button>
 
       {/* Heading */}
 
-      <div className="mb-10 flex items-center gap-4">
+      <div className="mb-8 flex items-center gap-4">
 
-        <div className="rounded-2xl bg-blue-600 p-4 text-white">
-          <Settings size={32} />
+        <div className="rounded-2xl bg-blue-600 p-3 sm:p-4 text-white">
+          <Settings size={28} className="sm:w-8 sm:h-8" />
         </div>
 
         <div>
 
-          <h1 className="text-4xl font-bold text-slate-800 dark:text-white">
+          <h1 className="text-2xl sm:text-4xl font-bold text-slate-800 dark:text-white">
             Settings
           </h1>
 

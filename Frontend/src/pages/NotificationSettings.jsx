@@ -1,5 +1,6 @@
-import { Bell, Check } from "lucide-react";
+import { Bell, Check, ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const STORAGE_KEY = "tmf_notification_preferences";
 
@@ -12,6 +13,7 @@ const DEFAULT_SETTINGS = {
 };
 
 function NotificationSettings() {
+  const navigate = useNavigate();
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [saved, setSaved] = useState(false);
 
@@ -69,15 +71,24 @@ function NotificationSettings() {
   ];
 
   return (
-    <div className="mx-auto max-w-5xl p-8">
+    <div className="mx-auto max-w-5xl px-3 sm:px-6 py-4 sm:py-8">
+
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/settings")}
+        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition mb-4 sm:mb-6"
+      >
+        <ArrowLeft size={18} />
+        Back to Settings
+      </button>
 
       <div className="rounded-3xl bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
 
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-white">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 sm:p-8 text-white">
 
           <div className="flex items-center gap-4">
 
-            <Bell size={36} />
+            <Bell size={32} className="sm:w-9 sm:h-9" />
 
             <div>
 

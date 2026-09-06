@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import backgroundImage from "../assets/RTC-1 PIC.webp";
 import { register } from "../services/authService";
 
@@ -25,6 +26,8 @@ function Register() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -332,58 +335,80 @@ function Register() {
                 <label className="text-white text-sm font-medium mb-1.5 block">
                   Password
                 </label>
-                <input
-                  type="password"
-                  name="password"
-                  placeholder="Create a password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="
-                    w-full
-                    rounded-xl
-                    bg-white/15
-                    border
-                    border-white/20
-                    px-4
-                    py-3
-                    text-white
-                    placeholder-gray-300
-                    outline-none
-                    focus:ring-2
-                    focus:ring-blue-400
-                    transition
-                  "
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Create a password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className="
+                      w-full
+                      rounded-xl
+                      bg-white/15
+                      border
+                      border-white/20
+                      pl-4
+                      pr-12
+                      py-3
+                      text-white
+                      placeholder-gray-300
+                      outline-none
+                      focus:ring-2
+                      focus:ring-blue-400
+                      transition
+                    "
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-300 hover:text-white p-1 focus:outline-none transition"
+                    title={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
 
               <div>
                 <label className="text-white text-sm font-medium mb-1.5 block">
                   Confirm Password
                 </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  placeholder="Confirm password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className="
-                    w-full
-                    rounded-xl
-                    bg-white/15
-                    border
-                    border-white/20
-                    px-4
-                    py-3
-                    text-white
-                    placeholder-gray-300
-                    outline-none
-                    focus:ring-2
-                    focus:ring-blue-400
-                    transition
-                  "
-                  required
-                />
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    placeholder="Confirm password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    className="
+                      w-full
+                      rounded-xl
+                      bg-white/15
+                      border
+                      border-white/20
+                      pl-4
+                      pr-12
+                      py-3
+                      text-white
+                      placeholder-gray-300
+                      outline-none
+                      focus:ring-2
+                      focus:ring-blue-400
+                      transition
+                    "
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-300 hover:text-white p-1 focus:outline-none transition"
+                    title={showConfirmPassword ? "Hide password" : "Show password"}
+                  >
+                    {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
             </div>
 

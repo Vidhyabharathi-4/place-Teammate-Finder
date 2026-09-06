@@ -62,10 +62,14 @@ class ApplicationService:
         db.refresh(application)
 
         # Notify Team Owner
+        applicant = db.query(User).filter(User.id == applicant_id).first()
+        applicant_name = applicant.name if applicant else "A student"
+        applicant_dept = f" ({applicant.department})" if applicant and applicant.department else ""
+
         NotificationService.create_notification(
             user_id=team.owner_id,
             title="New Team Application",
-            message=f"Someone has applied to join your team '{team.team_name}'.",
+            message=f"{applicant_name}{applicant_dept} applied to join '{team.team_name}'.",
             notification_type="APPLICATION",
             db=db
         )

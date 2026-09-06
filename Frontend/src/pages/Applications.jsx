@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Clock } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Clock, ArrowLeft } from "lucide-react";
 import applicationService from "../services/applicationService";
 
 function Applications() {
+  const navigate = useNavigate();
   const { teamId } = useParams();
 
   const [applications, setApplications] = useState([]);
@@ -76,12 +77,21 @@ function Applications() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-8">
-      <h1 className="text-4xl font-bold mb-2 text-slate-800 dark:text-white">
+    <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition mb-4 sm:mb-6"
+      >
+        <ArrowLeft size={18} />
+        Back
+      </button>
+
+      <h1 className="text-2xl sm:text-4xl font-bold mb-2 text-slate-800 dark:text-white">
         {teamId ? "Team Applications" : "My Applications"}
       </h1>
 
-      <p className="text-slate-500 dark:text-slate-400 mb-8">
+      <p className="text-slate-500 dark:text-slate-400 mb-6 sm:mb-8 text-sm sm:text-base">
         {teamId
           ? "Applications received for your team."
           : "Track your submitted applications."}

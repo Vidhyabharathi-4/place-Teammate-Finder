@@ -1,14 +1,17 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Lock,
   Eye,
   EyeOff,
   ShieldCheck,
+  ArrowLeft,
 } from "lucide-react";
 
 import { changePassword } from "../services/authService";
 
 function ChangePassword() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     current_password: "",
     new_password: "",
@@ -102,15 +105,24 @@ function ChangePassword() {
   );
 
   return (
-    <div className="mx-auto max-w-2xl p-8">
+    <div className="mx-auto max-w-2xl px-3 sm:px-6 py-4 sm:py-8">
 
-      <div className="rounded-3xl bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/settings")}
+        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition mb-4 sm:mb-6"
+      >
+        <ArrowLeft size={18} />
+        Back to Settings
+      </button>
 
-        <div className="rounded-t-3xl bg-gradient-to-r from-blue-600 to-indigo-700 p-8 text-white">
+      <div className="rounded-3xl bg-white dark:bg-slate-800 shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 sm:p-8 text-white">
 
           <div className="flex items-center gap-4">
 
-            <div className="rounded-2xl bg-white/20 p-4">
+            <div className="rounded-2xl bg-white/20 p-3 sm:p-4">
 
               <ShieldCheck size={34} />
 

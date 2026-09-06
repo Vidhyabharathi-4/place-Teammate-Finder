@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, Plus } from "lucide-react";
 
 import teamService from "../services/teamService";
 
 function MyTeams() {
+  const navigate = useNavigate();
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -38,18 +40,35 @@ function MyTeams() {
 
   if (error) {
     return (
-      <div className="p-8 text-center text-red-600 dark:text-red-400">
+      <div className="p-8 text-center text-red-500 font-semibold">
         {error}
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-8">
+    <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/dashboard")}
+        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition mb-4 sm:mb-6"
+      >
+        <ArrowLeft size={18} />
+        Back to Dashboard
+      </button>
 
-      <h1 className="text-4xl font-bold mb-8 text-slate-800 dark:text-white">
-        My Teams
-      </h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-4xl font-bold text-slate-800 dark:text-white">
+          My Teams
+        </h1>
+        <Link
+          to="/teams/create"
+          className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition shadow-md self-start sm:self-auto"
+        >
+          <Plus size={18} />
+          Create Team
+        </Link>
+      </div>
 
       {teams.length === 0 ? (
         <div className="bg-white dark:bg-slate-800 shadow-sm rounded-2xl border border-slate-200 dark:border-slate-700 p-8 text-center">

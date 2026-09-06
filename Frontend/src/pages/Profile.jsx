@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 import profileService from "../services/profileService";
 
@@ -12,6 +14,7 @@ import LinksCard from "../components/LinksCard";
 import EditProfileForm from "../components/EditProfileForm";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -90,9 +93,18 @@ const Profile = () => {
   }
 
   return (
-    <div className="mx-auto max-w-7xl p-8">
+    <div className="mx-auto max-w-7xl px-3 sm:px-6 py-4 sm:py-8">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/dashboard")}
+        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition mb-4 sm:mb-6"
+      >
+        <ArrowLeft size={18} />
+        Back to Dashboard
+      </button>
+
       {editing ? (
-        <div className="rounded-3xl bg-white p-8 shadow-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800">
+        <div className="rounded-3xl bg-white p-5 sm:p-8 shadow-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800">
           <h1 className="mb-8 text-3xl font-bold text-slate-800 dark:text-white">
             Edit Profile
           </h1>
