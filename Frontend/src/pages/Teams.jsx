@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
-import { Search, Plus, Filter, RotateCcw } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Search, Plus, Filter, RotateCcw, ArrowLeft } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import teamService from "../services/teamService";
 import TeamCard from "../components/TeamCard";
 
@@ -16,6 +16,7 @@ const SPECIALIZATION_OPTIONS = [
 const YEAR_OPTIONS = ["All Years", "1", "2", "3", "4", "5"];
 
 function Teams() {
+  const navigate = useNavigate();
   const [teams, setTeams] = useState([]);
   const [search, setSearch] = useState("");
   const [specialization, setSpecialization] = useState("All Specializations");
@@ -71,6 +72,15 @@ function Teams() {
 
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
+
+      {/* Back Button */}
+      <button
+        onClick={() => navigate("/dashboard")}
+        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition mb-4 sm:mb-6"
+      >
+        <ArrowLeft size={18} />
+        Back to Dashboard
+      </button>
 
       {/* Header with Title & Create Team Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">

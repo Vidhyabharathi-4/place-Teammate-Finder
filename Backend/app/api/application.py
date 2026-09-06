@@ -53,9 +53,12 @@ def get_team_applications(
     )
 
 
-# NEW ENDPOINT
 @router.get(
     "/my",
+    response_model=list[ApplicationResponse]
+)
+@router.get(
+    "/my/",
     response_model=list[ApplicationResponse]
 )
 def get_my_applications(
@@ -70,6 +73,10 @@ def get_my_applications(
 
 @router.put(
     "/{application_id}",
+    response_model=ApplicationResponse
+)
+@router.put(
+    "/{application_id}/",
     response_model=ApplicationResponse
 )
 def update_application_status(

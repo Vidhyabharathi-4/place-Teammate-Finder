@@ -11,6 +11,14 @@ function StatCard({
   return (
     <Card
       onClick={onClick}
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={(e) => {
+        if (onClick && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          onClick();
+        }
+      }}
       className={`shadow-xs hover:shadow-lg transition-all duration-200 border border-slate-200/90 dark:border-slate-700/80 p-5 sm:p-6 ${
         onClick
           ? "cursor-pointer hover:-translate-y-1 active:translate-y-0 group hover:border-blue-500/50"

@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Plus } from "lucide-react";
 
 import teamService from "../services/teamService";
+import { useAuth } from "../context/AuthContext";
 
 function MyTeams() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -90,9 +92,20 @@ function MyTeams() {
                   <h2 className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                     {team.team_name}
                   </h2>
-                  <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
-                    {team.status || "Open"}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    {user && user.id === team.owner_id ? (
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
+                        👑 Leader
+                      </span>
+                    ) : (
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                        🤝 Member
+                      </span>
+                    )}
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                      {team.status || "Open"}
+                    </span>
+                  </div>
                 </div>
 
                 {team.category && (
@@ -124,17 +137,19 @@ function MyTeams() {
 
                 <Link
                   to={`/teams/${team.id}/members`}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition font-medium text-sm"
                 >
                   View Members
                 </Link>
 
-                <Link
-                  to={`/applications/${team.id}`}
-                  className="bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition"
-                >
-                  Applications
-                </Link>
+                {(!user || user.id === team.owner_id) && (
+                  <Link
+                    to={`/applications/${team.id}`}
+                    className="bg-green-600 text-white px-4 py-2 rounded-xl hover:bg-green-700 transition font-medium text-sm"
+                  >
+                    Applications
+                  </Link>
+                )}
 
               </div>
 

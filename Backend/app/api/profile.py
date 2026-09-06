@@ -36,6 +36,10 @@ router = APIRouter(
     "",
     response_model=ProfileResponse
 )
+@router.get(
+    "/",
+    response_model=ProfileResponse
+)
 def get_profile(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -48,6 +52,11 @@ def get_profile(
 
 @router.put(
     "",
+    response_model=ProfileResponse,
+    status_code=status.HTTP_200_OK
+)
+@router.put(
+    "/",
     response_model=ProfileResponse,
     status_code=status.HTTP_200_OK
 )

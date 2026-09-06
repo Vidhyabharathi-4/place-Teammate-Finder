@@ -39,6 +39,11 @@ router = APIRouter(
 # -------------------------------------------------------
 
 @router.post(
+    "",
+    response_model=TeamResponse,
+    status_code=status.HTTP_201_CREATED
+)
+@router.post(
     "/",
     response_model=TeamResponse,
     status_code=status.HTTP_201_CREATED
@@ -60,6 +65,10 @@ def create_team(
 # Get All Teams
 # -------------------------------------------------------
 
+@router.get(
+    "",
+    response_model=list[TeamResponse]
+)
 @router.get(
     "/",
     response_model=list[TeamResponse]
@@ -95,6 +104,10 @@ def get_all_teams(
     "/my",
     response_model=list[TeamResponse]
 )
+@router.get(
+    "/my/",
+    response_model=list[TeamResponse]
+)
 def get_my_teams(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -114,6 +127,10 @@ def get_my_teams(
     "/{team_id}/members",
     response_model=list[TeamMemberResponse]
 )
+@router.get(
+    "/{team_id}/members/",
+    response_model=list[TeamMemberResponse]
+)
 def get_team_members(
     team_id: int,
     db: Session = Depends(get_db)
@@ -131,6 +148,10 @@ def get_team_members(
 
 @router.get(
     "/{team_id}",
+    response_model=TeamResponse
+)
+@router.get(
+    "/{team_id}/",
     response_model=TeamResponse
 )
 def get_team(
@@ -159,6 +180,10 @@ def get_team(
 
 @router.put(
     "/{team_id}",
+    response_model=TeamResponse
+)
+@router.put(
+    "/{team_id}/",
     response_model=TeamResponse
 )
 def update_team(
@@ -200,6 +225,9 @@ def update_team(
 
 @router.delete(
     "/{team_id}"
+)
+@router.delete(
+    "/{team_id}/"
 )
 def delete_team(
     team_id: int,

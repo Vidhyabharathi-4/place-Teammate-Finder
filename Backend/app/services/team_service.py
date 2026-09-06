@@ -58,10 +58,10 @@ class TeamService:
         owner_id: int,
         db: Session
     ):
-
+        member_subquery = db.query(TeamMember.team_id).filter(TeamMember.user_id == owner_id).subquery()
         return (
             db.query(Team)
-            .filter(Team.owner_id == owner_id)
+            .filter(or_(Team.owner_id == owner_id, Team.id.in_(member_subquery)))
             .order_by(Team.created_at.desc())
             .all()
         )
