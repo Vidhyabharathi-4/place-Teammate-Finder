@@ -88,10 +88,11 @@ app.include_router(notification_router)
 app.include_router(dashboard_router)
 
 # ----------------------------
-# Root
+# Root & Health
 # ----------------------------
 
 @app.get("/", tags=["Root"])
+@app.get("/health", tags=["Root"])
 def root():
     return {
         "message": "TeamMate Finder API Running",
