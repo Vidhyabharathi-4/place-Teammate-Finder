@@ -6,9 +6,16 @@ import notificationService from "../../services/notificationService";
 
 function formatTimeAgo(dateString) {
   if (!dateString) return "";
-  const date = new Date(dateString);
+
+  // If dateString doesn't contain a timezone indicator ('Z' or '+'), append 'Z' so it is parsed as UTC
+  let iso = String(dateString);
+  if (!iso.endsWith("Z") && !iso.includes("+") && !iso.slice(10).includes("-")) {
+    iso += "Z";
+  }
+
+  const date = new Date(iso);
   const now = new Date();
-  const diffInSeconds = Math.floor((now - date) / 1000);
+  const diffInSeconds = Math.max(0, Math.floor((now.getTime() - date.getTime()) / 1000));
 
   if (diffInSeconds < 60) return "Just now";
   const diffInMinutes = Math.floor(diffInSeconds / 60);

@@ -113,9 +113,25 @@ class ApplicationService:
         db: Session
     ):
 
-        return db.query(Application).filter(
-            Application.applicant_id == applicant_id
-        ).all()
+        return (
+            db.query(Application)
+            .filter(Application.applicant_id == applicant_id)
+            .order_by(Application.created_at.desc())
+            .all()
+        )
+
+    @staticmethod
+    def get_received_applications(
+        owner_id: int,
+        db: Session
+    ):
+        return (
+            db.query(Application)
+            .join(Team, Team.id == Application.team_id)
+            .filter(Team.owner_id == owner_id)
+            .order_by(Application.created_at.desc())
+            .all()
+        )
 
     @staticmethod
     def update_application_status(

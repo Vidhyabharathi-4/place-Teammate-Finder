@@ -65,62 +65,29 @@ function ProfileHeader({ profile, onEdit, onProfileUpdated }) {
       </div>
 
       {/* Profile Details Container */}
-      <div className="px-4 sm:px-8 pb-6 sm:pb-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 -mt-16 sm:-mt-20 md:-mt-24 mb-6">
-
-          {/* Avatar + Main Info */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6 text-center sm:text-left">
-            {/* Avatar */}
-            <div
-              onClick={handleAvatarClick}
-              className="relative h-32 w-32 sm:h-36 sm:w-36 md:h-40 md:w-40 shrink-0 cursor-pointer overflow-hidden rounded-full border-4 border-white dark:border-slate-800 shadow-2xl group bg-white"
-              title="Click to change profile picture"
-            >
-              {imageUrl ? (
-                <img
-                  src={imageUrl}
-                  alt="Profile"
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-blue-200 text-6xl sm:text-7xl">
-                  👤
-                </div>
-              )}
-
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition group-hover:opacity-100">
-                <Camera className="text-white" size={28} />
+      <div className="px-6 sm:px-10 pb-8">
+        {/* Top Action Row: Avatar overlapping banner + Edit Profile button */}
+        <div className="flex flex-col sm:flex-row items-center sm:items-end justify-between gap-4 -mt-16 sm:-mt-20 md:-mt-24 mb-4">
+          {/* Avatar */}
+          <div
+            onClick={handleAvatarClick}
+            className="relative h-32 w-32 sm:h-36 sm:w-36 md:h-44 md:w-44 shrink-0 cursor-pointer overflow-hidden rounded-full border-4 border-white dark:border-slate-800 shadow-xl group bg-white"
+            title="Click to change profile picture"
+          >
+            {imageUrl ? (
+              <img
+                src={imageUrl}
+                alt="Profile"
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-100 to-blue-200 text-6xl sm:text-7xl">
+                👤
               </div>
-            </div>
+            )}
 
-            {/* Name and Badges */}
-            <div className="flex-1 min-w-0">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                {profile?.name}
-              </h1>
-
-              <div className="mt-3 flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-2.5">
-                {profile?.department && (
-                  <div className="flex items-center gap-1.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60 px-3 py-1 text-xs sm:text-sm font-semibold">
-                    <GraduationCap size={15} />
-                    <span>{profile.department}</span>
-                  </div>
-                )}
-
-                {profile?.year && (
-                  <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 px-3 py-1 text-xs sm:text-sm font-semibold">
-                    <Calendar size={15} />
-                    <span>Year {profile.year}</span>
-                  </div>
-                )}
-
-                {profile?.specialization && (
-                  <div className="flex items-center gap-1.5 rounded-full bg-amber-50 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 px-3 py-1 text-xs sm:text-sm font-semibold">
-                    <Award size={15} />
-                    <span>{profile.specialization}</span>
-                  </div>
-                )}
-              </div>
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition group-hover:opacity-100">
+              <Camera className="text-white" size={28} />
             </div>
           </div>
 
@@ -134,8 +101,38 @@ function ProfileHeader({ profile, onEdit, onProfileUpdated }) {
           </button>
         </div>
 
+        {/* User Name & Badges Row (Safely on the card background with ZERO overlap!) */}
+        <div className="text-center sm:text-left pt-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+            {profile?.name}
+          </h1>
+
+          <div className="mt-3 flex flex-wrap items-center justify-center sm:justify-start gap-2 sm:gap-2.5">
+            {profile?.department && (
+              <div className="flex items-center gap-1.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60 px-3.5 py-1 text-xs sm:text-sm font-semibold">
+                <GraduationCap size={15} />
+                <span>{profile.department}</span>
+              </div>
+            )}
+
+            {profile?.year && (
+              <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 px-3.5 py-1 text-xs sm:text-sm font-semibold">
+                <Calendar size={15} />
+                <span>Year {profile.year}</span>
+              </div>
+            )}
+
+            {profile?.specialization && (
+              <div className="flex items-center gap-1.5 rounded-full bg-amber-50 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 px-3.5 py-1 text-xs sm:text-sm font-semibold">
+                <Award size={15} />
+                <span>{profile.specialization}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Contact Info bar */}
-        <div className="flex flex-wrap items-center gap-2 text-slate-600 dark:text-slate-300 pt-4 border-t border-slate-100 dark:border-slate-700/60 text-sm">
+        <div className="flex flex-wrap items-center gap-2 text-slate-600 dark:text-slate-300 pt-5 mt-6 border-t border-slate-100 dark:border-slate-700/60 text-sm">
           <Mail size={16} className="text-blue-600 dark:text-blue-400 shrink-0" />
           <span className="font-medium break-all">{profile?.college_email}</span>
         </div>

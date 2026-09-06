@@ -21,9 +21,15 @@ const getTeamApplications = async (teamId) => {
   return response.data;
 };
 
-// Get my applications
+// Get my applications (sent by me)
 const getMyApplications = async () => {
   const response = await api.get("/api/applications/my");
+  return response.data;
+};
+
+// Get all applications received for any of my teams
+const getReceivedApplications = async () => {
+  const response = await api.get("/api/applications/received");
   return response.data;
 };
 
@@ -46,6 +52,7 @@ const applicationService = {
   applyToTeam,
   getTeamApplications,
   getMyApplications,
+  getReceivedApplications,
   updateApplicationStatus,
 };
 

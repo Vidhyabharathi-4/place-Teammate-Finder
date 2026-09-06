@@ -71,6 +71,24 @@ def get_my_applications(
     )
 
 
+@router.get(
+    "/received",
+    response_model=list[ApplicationResponse]
+)
+@router.get(
+    "/received/",
+    response_model=list[ApplicationResponse]
+)
+def get_received_applications(
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    return ApplicationService.get_received_applications(
+        owner_id=current_user.id,
+        db=db
+    )
+
+
 @router.put(
     "/{application_id}",
     response_model=ApplicationResponse
