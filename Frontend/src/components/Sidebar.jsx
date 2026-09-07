@@ -1,8 +1,10 @@
+import { useState, useEffect } from "react";
 import {
   Home,
   Users,
   FolderKanban,
   ClipboardList,
+  MessageSquare,
   User,
   Bell,
   Settings,
@@ -12,6 +14,7 @@ import {
 
 import { NavLink, useNavigate } from "react-router-dom";
 import rathinamLogo from "../assets/rathinam-logo.jpg";
+import chatService from "../services/chatService";
 
 const menu = [
   {
@@ -35,14 +38,20 @@ const menu = [
     path: "/applications",
   },
   {
-    name: "Profile",
-    icon: User,
-    path: "/profile",
+    name: "Chat",
+    icon: MessageSquare,
+    path: "/chat",
+    showBadge: true,
   },
   {
     name: "Notifications",
     icon: Bell,
     path: "/notifications",
+  },
+  {
+    name: "Profile",
+    icon: User,
+    path: "/profile",
   },
   {
     name: "Settings",
@@ -53,6 +62,28 @@ const menu = [
 
 function Sidebar({ isOpen, onClose }) {
   const navigate = useNavigate();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchUnread = async () => {
+      try {
+        const data = await chatService.getUnreadCount();
+        if (isMounted) {
+          setUnreadCount(data?.total_unread || 0);
+        }
+      } catch (err) {
+        // Silently ignore if not logged in
+      }
+    };
+
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 15000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   function logout() {
     localStorage.removeItem("access_token");
@@ -112,15 +143,23 @@ function Sidebar({ isOpen, onClose }) {
                 to={item.path}
                 onClick={onClose}
                 className={({ isActive }) =>
-                  `flex items-center gap-3.5 rounded-xl px-4 py-2.5 font-medium transition-all duration-200 sm:px-5 sm:py-3 ${
+                  `flex items-center justify-between rounded-xl px-4 py-2.5 font-medium transition-all duration-200 sm:px-5 sm:py-3 ${
                     isActive
                       ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                       : "text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                   }`
                 }
               >
-                <Icon size={19} />
-                <span className="text-sm sm:text-base">{item.name}</span>
+                <div className="flex items-center gap-3.5">
+                  <Icon size={19} />
+                  <span className="text-sm sm:text-base">{item.name}</span>
+                </div>
+
+                {item.showBadge && unreadCount > 0 && (
+                  <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-blue-500 text-white shadow-xs">
+                    {unreadCount}
+                  </span>
+                )}
               </NavLink>
             );
           })}

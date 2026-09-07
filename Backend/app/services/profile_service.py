@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from fastapi import HTTPException, status
 
 from app.models.user import User
 from app.schemas.profile import ProfileUpdate
@@ -40,6 +41,22 @@ class ProfileService:
         current_user.profile_completion = score
 
         return current_user
+
+    @staticmethod
+    def get_user_profile(
+        user_id: int,
+        db: Session
+    ) -> User:
+        """
+        Return any student's public profile by user ID.
+        """
+        user = db.query(User).filter(User.id == user_id).first()
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User not found."
+            )
+        return ProfileService.get_profile(user, db)
 
     @staticmethod
     def update_profile(

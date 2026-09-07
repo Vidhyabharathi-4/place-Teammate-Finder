@@ -16,11 +16,14 @@ from app.models.team import Team
 from app.models.application import Application
 from app.models.team_member import TeamMember
 from app.models.notification import Notification
+from app.models.direct_message import DirectMessage
+from app.models.team_message import TeamMessage
 
 # Routers
 from app.api.auth import router as auth_router
 from app.api.team import router as team_router
 from app.api.application import router as application_router
+from app.api.chat import router as chat_router
 
 # Create Database Tables
 try:
@@ -86,6 +89,7 @@ app.include_router(application_router)
 app.include_router(profile_router)
 app.include_router(notification_router)
 app.include_router(dashboard_router)
+app.include_router(chat_router)
 
 # ----------------------------
 # Root & Health

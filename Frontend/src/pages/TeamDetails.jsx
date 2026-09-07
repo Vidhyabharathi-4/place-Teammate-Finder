@@ -7,6 +7,8 @@ import {
   User,
   Send,
   ArrowLeft,
+  MessageSquare,
+  ClipboardList,
 } from "lucide-react";
 
 import teamService from "../services/teamService";
@@ -19,6 +21,7 @@ function TeamDetails() {
   const { id } = useParams();
 
   const [team, setTeam] = useState(null);
+  const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
@@ -28,13 +31,18 @@ function TeamDetails() {
   const [applying, setApplying] = useState(false);
 
   useEffect(() => {
-    fetchTeam();
-  }, []);
+    fetchTeamData();
+  }, [id]);
 
-  const fetchTeam = async () => {
+  const fetchTeamData = async () => {
     try {
-      const data = await teamService.getTeamById(id);
-      setTeam(data);
+      setLoading(true);
+      const [teamData, membersData] = await Promise.all([
+        teamService.getTeamById(id),
+        teamService.getTeamMembers(id).catch(() => []),
+      ]);
+      setTeam(teamData);
+      setMembers(membersData || []);
     } catch (err) {
       console.error(err);
       setError("Failed to load team details.");
@@ -50,12 +58,10 @@ function TeamDetails() {
 
     try {
       await applicationService.applyToTeam(id, message);
-
       setSuccess("Application submitted successfully.");
       setMessage("");
     } catch (err) {
       console.error(err);
-
       if (err.response?.data?.detail) {
         setError(err.response.data.detail);
       } else {
@@ -82,22 +88,24 @@ function TeamDetails() {
     );
   }
 
+  const isOwner = Boolean(user && user.id === team.owner_id);
+  const isMember = Boolean(
+    isOwner || (user && members.some((m) => m.user_id === user.id))
+  );
+
   return (
     <div className="max-w-5xl mx-auto px-3 sm:px-6 py-4 sm:py-8">
-
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)}
         className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition mb-4 sm:mb-6"
       >
         <ArrowLeft size={18} />
-        Back to Teams
+        Back
       </button>
 
-      {/* Header */}
-
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl text-white p-5 sm:p-8 shadow-lg">
-
+      {/* Header Banner */}
+      <div className="bg-linear-to-r from-blue-600 to-indigo-600 rounded-3xl text-white p-5 sm:p-8 shadow-lg">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h1 className="text-2xl sm:text-4xl font-bold">
             {team.team_name}
@@ -115,14 +123,49 @@ function TeamDetails() {
           </div>
         </div>
 
-        <p className="mt-4 text-blue-100 max-w-2xl">
+        <p className="mt-4 text-blue-100 max-w-2xl leading-relaxed">
           {team.description}
         </p>
+      </div>
 
+      {/* Team Navigation Tabs */}
+      <div className="flex flex-wrap items-center gap-2 mt-6">
+        <button
+          className="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-blue-600 text-white shadow-xs"
+        >
+          Overview
+        </button>
+
+        <button
+          onClick={() => navigate(`/teams/${team.id}/members`)}
+          className="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition flex items-center gap-1.5"
+        >
+          <Users size={15} />
+          <span>Members ({members.length})</span>
+        </button>
+
+        {isOwner && (
+          <button
+            onClick={() => navigate(`/applications/${team.id}`)}
+            className="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition flex items-center gap-1.5"
+          >
+            <ClipboardList size={15} />
+            <span>Applications</span>
+          </button>
+        )}
+
+        {isMember && (
+          <button
+            onClick={() => navigate(`/chat?team=${team.id}`)}
+            className="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900 transition flex items-center gap-1.5 shadow-2xs"
+          >
+            <MessageSquare size={15} />
+            <span>Team Chat</span>
+          </button>
+        )}
       </div>
 
       {/* Alerts */}
-
       {error && (
         <div className="mt-6 rounded-xl bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 p-4 border border-red-200 dark:border-red-800">
           {error}
@@ -135,18 +178,14 @@ function TeamDetails() {
         </div>
       )}
 
-      {/* Team Information */}
-
-      <div className="grid md:grid-cols-2 gap-6 mt-8">
-
+      {/* Team Information & Action Card */}
+      <div className="grid md:grid-cols-2 gap-6 mt-6">
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
-
           <h2 className="text-2xl font-bold mb-5 text-slate-800 dark:text-white">
             Team Information
           </h2>
 
           <div className="space-y-5">
-
             <div className="flex gap-3">
               <Code className="text-blue-600 dark:text-blue-400 mt-1 shrink-0" />
               <div>
@@ -166,7 +205,11 @@ function TeamDetails() {
                   Team Capacity
                 </h3>
                 <p className="text-slate-600 dark:text-slate-300">
-                  {team.current_members || 1} / {team.max_members} members ({team.members_needed !== undefined ? team.members_needed : Math.max(0, team.max_members - (team.current_members || 1))} needed)
+                  {team.current_members || 1} / {team.max_members} members (
+                  {team.members_needed !== undefined
+                    ? team.members_needed
+                    : Math.max(0, team.max_members - (team.current_members || 1))}{" "}
+                  needed)
                 </p>
               </div>
             </div>
@@ -182,7 +225,8 @@ function TeamDetails() {
                 </p>
                 {team.owner_department && (
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    {team.owner_department} {team.owner_specialization ? `• ${team.owner_specialization}` : ""}
+                    {team.owner_department}{" "}
+                    {team.owner_specialization ? `• ${team.owner_specialization}` : ""}
                   </p>
                 )}
               </div>
@@ -199,14 +243,11 @@ function TeamDetails() {
                 </p>
               </div>
             </div>
-
           </div>
-
         </div>
 
-        {/* Application Card / Owner Card */}
-
-        {user && user.id === team.owner_id ? (
+        {/* Action Column: Owner Card / Member Card / Apply Card */}
+        {isOwner ? (
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex flex-col justify-center items-center text-center">
             <div className="w-14 h-14 rounded-2xl bg-purple-100 text-purple-600 dark:bg-purple-900/40 dark:text-purple-300 flex items-center justify-center mb-4 text-2xl font-bold">
               👑
@@ -215,22 +256,42 @@ function TeamDetails() {
               You own this team
             </h2>
             <p className="text-slate-500 dark:text-slate-400 text-sm max-w-sm mb-6">
-              You created this team. Manage incoming member applications and team members below.
+              Manage incoming join requests, track teammates, and communicate in your team group chat.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
+              <button
+                onClick={() => navigate(`/chat?team=${team.id}`)}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-xl font-semibold text-sm transition shadow-sm flex items-center justify-center gap-1.5"
+              >
+                <MessageSquare size={16} />
+                <span>Open Team Chat</span>
+              </button>
               <button
                 onClick={() => navigate(`/applications/${team.id}`)}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl font-semibold text-sm transition shadow-sm"
               >
-                Review Applications
-              </button>
-              <button
-                onClick={() => navigate(`/teams/${team.id}/members`)}
-                className="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-800 dark:text-white px-5 py-3 rounded-xl font-semibold text-sm transition"
-              >
-                View Team Members
+                Applications
               </button>
             </div>
+          </div>
+        ) : isMember ? (
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 flex flex-col justify-center items-center text-center">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-300 flex items-center justify-center mb-4 text-2xl font-bold">
+              🟢
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white mb-2">
+              You are a Team Member
+            </h2>
+            <p className="text-slate-500 dark:text-slate-400 text-sm max-w-sm mb-6">
+              You are collaborating with this team. Join the team chat to discuss tasks, plan meetings, and share progress.
+            </p>
+            <button
+              onClick={() => navigate(`/chat?team=${team.id}`)}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold text-sm transition shadow-sm flex items-center justify-center gap-2"
+            >
+              <MessageSquare size={17} />
+              <span>Open Team Group Chat</span>
+            </button>
           </div>
         ) : (
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
@@ -238,7 +299,7 @@ function TeamDetails() {
               Apply to Join
             </h2>
 
-            <label className="block font-medium text-slate-700 dark:text-slate-200">
+            <label className="block font-medium text-slate-700 dark:text-slate-200 text-sm">
               Why do you want to join this team?
             </label>
 
@@ -253,16 +314,14 @@ function TeamDetails() {
             <button
               onClick={handleApply}
               disabled={applying || !message.trim()}
-              className="mt-5 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 dark:disabled:bg-slate-600 text-white py-3 rounded-xl font-semibold flex justify-center items-center gap-2 transition shadow-sm text-sm sm:text-base"
+              className="mt-5 w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 dark:disabled:bg-slate-600 text-white py-3 rounded-xl font-semibold flex justify-center items-center gap-2 transition shadow-sm text-sm sm:text-base cursor-pointer disabled:cursor-not-allowed"
             >
               <Send size={18} />
               <span>{applying ? "Submitting Application..." : "Submit Application"}</span>
             </button>
           </div>
         )}
-
       </div>
-
     </div>
   );
 }

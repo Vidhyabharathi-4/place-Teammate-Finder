@@ -5,6 +5,11 @@ const getProfile = async () => {
   return response.data;
 };
 
+const getUserProfile = async (userId) => {
+  const response = await api.get(`/api/profile/${userId}`);
+  return response.data;
+};
+
 const updateProfile = async (profileData) => {
   const response = await api.put("/api/profile", profileData);
   return response.data;
@@ -30,6 +35,7 @@ const uploadProfilePhoto = async (file) => {
 
 const profileService = {
   getProfile,
+  getUserProfile,
   updateProfile,
   uploadProfilePhoto,
 };

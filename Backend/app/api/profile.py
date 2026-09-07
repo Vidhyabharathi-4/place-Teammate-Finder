@@ -50,6 +50,21 @@ def get_profile(
     )
 
 
+@router.get(
+    "/{user_id}",
+    response_model=ProfileResponse
+)
+def get_user_profile_by_id(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    return ProfileService.get_user_profile(
+        user_id,
+        db
+    )
+
+
 @router.put(
     "",
     response_model=ProfileResponse,

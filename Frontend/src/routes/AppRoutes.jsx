@@ -14,6 +14,7 @@ import Applications from "../pages/Applications";
 import Members from "../pages/Members";
 import Notifications from "../pages/Notifications";
 import Profile from "../pages/Profile";
+import Chat from "../pages/Chat";
 import Settings from "../pages/Settings";
 import ChangePassword from "../pages/ChangePassword";
 import NotificationSettings from "../pages/NotificationSettings";
@@ -135,6 +136,19 @@ function AppRoutes() {
           }
         />
 
+        {/* Real-time Chat */}
+
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Chat />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
         {/* Notifications */}
 
         <Route
@@ -148,10 +162,21 @@ function AppRoutes() {
           }
         />
 
-        {/* Profile */}
+        {/* Profile (Self & Other Students) */}
 
         <Route
           path="/profile"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <Profile />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile/:id"
           element={
             <ProtectedRoute>
               <Layout>

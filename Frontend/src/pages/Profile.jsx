@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
 import profileService from "../services/profileService";
+import { useAuth } from "../context/AuthContext";
 
 import ProfileHeader from "../components/ProfileHeader";
 import ProfileStats from "../components/ProfileStats";
@@ -15,32 +16,49 @@ import EditProfileForm from "../components/EditProfileForm";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const { user: currentUser } = useAuth();
+
+  const targetUserId = id || searchParams.get("user");
+  const isOtherUser = Boolean(
+    targetUserId && currentUser && Number(targetUserId) !== currentUser.id
+  );
+
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editing, setEditing] = useState(false);
 
-  useEffect(() => {
-    loadProfile();
-  }, []);
-
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await profileService.getProfile();
-      setProfile(data);
+      if (isOtherUser) {
+        const data = await profileService.getUserProfile(targetUserId);
+        setProfile(data);
+      } else {
+        const data = await profileService.getProfile();
+        setProfile(data);
+      }
     } catch (err) {
       console.error("Profile load error:", err);
       if (err.response?.status === 401) {
         setError("Your session has expired. Please log in again to view your profile.");
       } else {
-        setError(err.response?.data?.detail || "Could not load profile. Please make sure the server is reachable.");
+        setError(
+          err.response?.data?.detail ||
+            "Could not load profile. Please make sure the user exists and the server is reachable."
+        );
       }
     } finally {
       setLoading(false);
     }
-  };
+  }, [isOtherUser, targetUserId]);
+
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
 
   const handleSave = async (formData) => {
     try {
@@ -81,12 +99,12 @@ const Profile = () => {
           >
             Try Again
           </button>
-          <a
-            href="/"
+          <button
+            onClick={() => navigate(-1)}
             className="px-6 py-2.5 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-white rounded-xl font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition"
           >
-            Go to Login
-          </a>
+            Go Back
+          </button>
         </div>
       </div>
     );
@@ -96,14 +114,14 @@ const Profile = () => {
     <div className="mx-auto max-w-7xl px-3 sm:px-6 py-4 sm:py-8">
       {/* Back Button */}
       <button
-        onClick={() => navigate("/dashboard")}
+        onClick={() => navigate(-1)}
         className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition mb-4 sm:mb-6"
       >
         <ArrowLeft size={18} />
-        Back to Dashboard
+        Back
       </button>
 
-      {editing ? (
+      {editing && !isOtherUser ? (
         <div className="rounded-3xl bg-white p-5 sm:p-8 shadow-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800">
           <h1 className="mb-8 text-3xl font-bold text-slate-800 dark:text-white">
             Edit Profile
@@ -121,6 +139,7 @@ const Profile = () => {
             profile={profile}
             onEdit={() => setEditing(true)}
             onProfileUpdated={setProfile}
+            isOtherUser={isOtherUser}
           />
 
           <div className="mt-8">
