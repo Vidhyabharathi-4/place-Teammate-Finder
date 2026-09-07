@@ -94,34 +94,46 @@ function Members() {
               >
                 <div>
                   <div className="flex items-center gap-4">
-                    {member.profile_picture ? (
-                      <img
-                        src={getImageUrl(member.profile_picture)}
-                        alt={member.name}
-                        className="w-16 h-16 rounded-full object-cover border-2 border-slate-200 dark:border-slate-600"
-                      />
-                    ) : (
-                      <div className="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center text-2xl font-bold shrink-0">
-                        {member.name.charAt(0).toUpperCase()}
-                      </div>
-                    )}
+                    <button
+                      onClick={() => navigate(`/profile/${member.user_id}`)}
+                      className="cursor-pointer group relative shrink-0"
+                    >
+                      {member.profile_picture ? (
+                        <img
+                          src={getImageUrl(member.profile_picture)}
+                          alt={member.name}
+                          className="w-16 h-16 rounded-2xl object-cover border-2 border-slate-200 dark:border-slate-600 group-hover:border-blue-500 transition"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center text-2xl font-bold group-hover:shadow-md transition">
+                          {member.name.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                    </button>
 
-                    <div>
-                      <h2 className="text-xl font-bold text-slate-800 dark:text-white">
-                        {member.name}
-                      </h2>
-
-                      <span
-                        className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-semibold ${
-                          member.role === "Owner"
-                            ? "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300"
-                            : "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300"
-                        }`}
+                    <div className="min-w-0 flex-1">
+                      <button
+                        onClick={() => navigate(`/profile/${member.user_id}`)}
+                        className="text-lg font-bold text-slate-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition truncate text-left block w-full"
                       >
-                        {member.role === "Owner"
-                          ? "👑 Team Owner"
-                          : "🟢 Member"}
-                      </span>
+                        {member.name}
+                      </button>
+
+                      <div className="flex flex-wrap items-center gap-1.5 mt-1">
+                        <span
+                          className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+                            member.role === "Owner"
+                              ? "bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300"
+                              : "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300"
+                          }`}
+                        >
+                          {member.role === "Owner" ? "👑 Owner" : "🟢 Member"}
+                        </span>
+
+                        <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
+                          #RTC-{String(member.user_id).padStart(4, "0")}
+                        </span>
+                      </div>
                     </div>
                   </div>
 

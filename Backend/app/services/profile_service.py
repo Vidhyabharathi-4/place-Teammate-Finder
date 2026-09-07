@@ -44,17 +44,36 @@ class ProfileService:
 
     @staticmethod
     def get_user_profile(
-        user_id: int,
+        identifier: str | int,
         db: Session
     ) -> User:
         """
-        Return any student's public profile by user ID.
+        Return any student's public profile by user ID, candidate ID (RTC-xxx),
+        register number, or email handle.
         """
-        user = db.query(User).filter(User.id == user_id).first()
+        user = None
+        ident_str = str(identifier).strip()
+
+        # 1. Try by numeric ID (handles e.g. "4", "RTC-004", "RTC4")
+        cleaned = ident_str.upper().replace("RTC-", "").replace("RTC", "")
+        if cleaned.isdigit():
+            user = db.query(User).filter(User.id == int(cleaned)).first()
+
+        # 2. Try by register_number
+        if not user:
+            user = db.query(User).filter(User.register_number.ilike(ident_str)).first()
+
+        # 3. Try by college_email prefix or exact email
+        if not user:
+            user = db.query(User).filter(
+                (User.college_email.ilike(ident_str)) |
+                (User.college_email.ilike(f"{ident_str}@%"))
+            ).first()
+
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found."
+                detail="Candidate profile not found."
             )
         return ProfileService.get_profile(user, db)
 

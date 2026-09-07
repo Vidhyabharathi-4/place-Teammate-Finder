@@ -216,13 +216,28 @@ function TeamDetails() {
 
             <div className="flex gap-3">
               <User className="text-purple-600 dark:text-purple-400 mt-1 shrink-0" />
-              <div>
-                <h3 className="font-semibold text-slate-800 dark:text-white">
-                  Team Owner
-                </h3>
-                <p className="text-slate-600 dark:text-slate-300 font-medium">
+              <div className="flex-1">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-slate-800 dark:text-white">
+                    Team Owner
+                  </h3>
+                  {!isOwner && team.owner_id && (
+                    <button
+                      onClick={() => navigate(`/chat?user=${team.owner_id}`)}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 dark:bg-slate-700 hover:bg-blue-100 dark:hover:bg-slate-600 text-blue-600 dark:text-blue-400 transition"
+                      title="Direct Message Owner"
+                    >
+                      <MessageSquare size={13} />
+                      <span>Message</span>
+                    </button>
+                  )}
+                </div>
+                <button
+                  onClick={() => navigate(`/profile/${team.owner_id}`)}
+                  className="text-slate-600 dark:text-slate-300 font-medium hover:text-blue-600 dark:hover:text-blue-400 transition underline-offset-2 hover:underline text-left mt-0.5"
+                >
                   {team.owner_name || `User #${team.owner_id}`}
-                </p>
+                </button>
                 {team.owner_department && (
                   <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                     {team.owner_department}{" "}

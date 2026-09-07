@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Clock, ArrowLeft, Inbox, Send, Check, X } from "lucide-react";
+import { Clock, ArrowLeft, Inbox, Send, Check, X, User, MessageSquare, ExternalLink } from "lucide-react";
 import applicationService from "../services/applicationService";
 
 function Applications() {
@@ -181,14 +181,28 @@ function Applications() {
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                      <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white">
-                        {isReceived
-                          ? application.applicant_name || `Applicant #${application.applicant_id}`
-                          : application.team_name || `Team #${application.team_id}`}
-                      </h2>
+                      {isReceived ? (
+                        <button
+                          onClick={() => navigate(`/profile/${application.applicant_id}`)}
+                          className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition inline-flex items-center gap-2 text-left group"
+                        >
+                          <span>{application.applicant_name || `Applicant #${application.applicant_id}`}</span>
+                          <ExternalLink size={16} className="opacity-0 group-hover:opacity-100 transition-opacity text-blue-500" />
+                        </button>
+                      ) : (
+                        <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-white">
+                          {application.team_name || `Team #${application.team_id}`}
+                        </h2>
+                      )}
+
+                      {isReceived && (
+                        <span className="px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-blue-50 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                          #RTC-{String(application.applicant_id).padStart(4, "0")}
+                        </span>
+                      )}
 
                       {application.team_name && isReceived && (
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
                           Team: {application.team_name}
                         </span>
                       )}
@@ -247,26 +261,48 @@ function Applications() {
                   </div>
                 </div>
 
-                {/* Accept / Reject Action Buttons for Received Applications */}
-                {isReceived && application.status === "Pending" && (
-                  <div className="flex flex-wrap items-center gap-3 mt-6 pt-5 border-t border-slate-100 dark:border-slate-700">
-                    <button
-                      onClick={() => updateStatus(application.id, "Accepted")}
-                      disabled={updatingId === application.id}
-                      className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition shadow-sm"
-                    >
-                      <Check size={16} />
-                      <span>{updatingId === application.id ? "Processing..." : "Accept Member"}</span>
-                    </button>
+                {/* Candidate Action Buttons for Received Applications */}
+                {isReceived && (
+                  <div className="flex flex-wrap items-center justify-between gap-3 mt-6 pt-5 border-t border-slate-100 dark:border-slate-700">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        onClick={() => navigate(`/profile/${application.applicant_id}`)}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 transition"
+                      >
+                        <User size={14} />
+                        <span>View Full Profile</span>
+                      </button>
 
-                    <button
-                      onClick={() => updateStatus(application.id, "Rejected")}
-                      disabled={updatingId === application.id}
-                      className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition shadow-sm"
-                    >
-                      <X size={16} />
-                      <span>{updatingId === application.id ? "Processing..." : "Decline"}</span>
-                    </button>
+                      <button
+                        onClick={() => navigate(`/chat?user=${application.applicant_id}`)}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/50 dark:hover:bg-blue-900/60 text-blue-600 dark:text-blue-300 border border-blue-200 dark:border-blue-800 transition"
+                      >
+                        <MessageSquare size={14} />
+                        <span>Direct Message</span>
+                      </button>
+                    </div>
+
+                    {application.status === "Pending" && (
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          onClick={() => updateStatus(application.id, "Accepted")}
+                          disabled={updatingId === application.id}
+                          className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white px-5 py-2 rounded-xl text-xs font-semibold transition shadow-sm cursor-pointer"
+                        >
+                          <Check size={15} />
+                          <span>{updatingId === application.id ? "Processing..." : "Accept Member"}</span>
+                        </button>
+
+                        <button
+                          onClick={() => updateStatus(application.id, "Rejected")}
+                          disabled={updatingId === application.id}
+                          className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white px-5 py-2 rounded-xl text-xs font-semibold transition shadow-sm cursor-pointer"
+                        >
+                          <X size={15} />
+                          <span>{updatingId === application.id ? "Processing..." : "Decline"}</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

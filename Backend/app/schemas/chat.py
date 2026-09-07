@@ -66,6 +66,7 @@ class UnreadCountsResponse(BaseModel):
 class ChatUserResponse(BaseModel):
     id: int
     name: str
+    register_number: Optional[str] = None
     college_email: str
     department: Optional[str] = None
     year: Optional[int] = None

@@ -1,124 +1,121 @@
 import {
   Users,
-  UserCheck,
-  Rocket,
-  Star
+  FolderKanban,
+  Award,
+  Sparkles,
+  ArrowUpRight,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function ProfileStats({ profile }) {
-
-  const score = calculateScore(profile);
+  const completion = profile?.profile_completion ?? 20;
 
   const stats = [
     {
+      title: "Profile Strength",
+      value: `${completion}%`,
+      subtitle: completion >= 80 ? "All-Star Profile" : "Add skills & bio to boost",
+      icon: Sparkles,
+      iconColor: "text-amber-500 dark:text-amber-400",
+      iconBg: "bg-amber-100/80 dark:bg-amber-950/50",
+      borderColor: "border-amber-200/80 dark:border-amber-900/40",
+      badge: completion >= 80 ? "Strong" : "In Progress",
+      badgeColor:
+        completion >= 80
+          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300"
+          : "bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300",
+    },
+    {
       title: "Teams Created",
-      value: profile?.teams_created || 0,
-      icon: Users,
-      iconBg: "bg-blue-100 dark:bg-blue-900/40",
+      value: profile?.teams_created ?? 0,
+      subtitle: "Teams founded as leader",
+      icon: FolderKanban,
       iconColor: "text-blue-600 dark:text-blue-400",
-      border: "border-blue-100 dark:border-slate-700"
+      iconBg: "bg-blue-100/80 dark:bg-blue-950/50",
+      borderColor: "border-blue-200/80 dark:border-blue-900/40",
+      link: "/my-teams",
     },
     {
       title: "Teams Joined",
-      value: profile?.teams_joined || 0,
-      icon: UserCheck,
-      iconBg: "bg-green-100 dark:bg-green-900/40",
-      iconColor: "text-green-600 dark:text-green-400",
-      border: "border-green-100 dark:border-slate-700"
+      value: profile?.teams_joined ?? 0,
+      subtitle: "Active collaborations",
+      icon: Users,
+      iconColor: "text-emerald-600 dark:text-emerald-400",
+      iconBg: "bg-emerald-100/80 dark:bg-emerald-950/50",
+      borderColor: "border-emerald-200/80 dark:border-emerald-900/40",
+      link: "/my-teams",
     },
     {
-      title: "Projects",
-      value: profile?.projects || 0,
-      icon: Rocket,
-      iconBg: "bg-purple-100 dark:bg-purple-900/40",
-      iconColor: "text-purple-600 dark:text-purple-400",
-      border: "border-purple-100 dark:border-slate-700"
+      title: "Specialization Track",
+      value: profile?.specialization || "General",
+      subtitle: profile?.department || "Rathinam College",
+      icon: Award,
+      iconColor: "text-indigo-600 dark:text-indigo-400",
+      iconBg: "bg-indigo-100/80 dark:bg-indigo-950/50",
+      borderColor: "border-indigo-200/80 dark:border-indigo-900/40",
+      badge: "Track",
+      badgeColor: "bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300",
     },
-    {
-      title: "Profile Score",
-      value: `${score}%`,
-      icon: Star,
-      iconBg: "bg-orange-100 dark:bg-orange-900/40",
-      iconColor: "text-orange-600 dark:text-orange-400",
-      border: "border-orange-100 dark:border-slate-700"
-    }
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-5">
       {stats.map((item) => {
         const Icon = item.icon;
 
-        return (
+        const Content = (
           <div
-            key={item.title}
-            className={`
-              group
-              rounded-2xl sm:rounded-3xl
-              border
-              ${item.border}
-              bg-white
-              dark:bg-slate-800
-              p-4 sm:p-6
-              shadow-sm
-              transition-all
-              duration-300
-              hover:-translate-y-1
-              hover:shadow-md
-            `}
+            className={`relative overflow-hidden rounded-2xl sm:rounded-3xl p-4 sm:p-5 bg-white dark:bg-slate-900 border ${item.borderColor} shadow-xs hover:shadow-md transition-all duration-200 group flex flex-col justify-between`}
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
-                  {item.title}
-                </p>
-
-                <h2 className="mt-1 sm:mt-2 text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-white tracking-tight">
-                  {item.value}
-                </h2>
-              </div>
-
+            {/* Top Row: Icon + Badge/Arrow */}
+            <div className="flex items-center justify-between gap-2 mb-3">
               <div
-                className={`
-                  ${item.iconBg}
-                  ${item.iconColor}
-                  flex
-                  h-11 w-11 sm:h-14 sm:w-14
-                  items-center
-                  justify-center
-                  rounded-xl sm:rounded-2xl
-                  transition
-                  group-hover:scale-105
-                  shrink-0
-                  ml-2
-                `}
+                className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 shadow-2xs ${item.iconBg}`}
               >
-                <Icon size={22} className="sm:w-7 sm:h-7" />
+                <Icon size={20} className={item.iconColor} />
               </div>
+
+              {item.badge ? (
+                <span
+                  className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold ${item.badgeColor}`}
+                >
+                  {item.badge}
+                </span>
+              ) : item.link ? (
+                <ArrowUpRight
+                  size={16}
+                  className="text-slate-400 group-hover:text-blue-600 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              ) : null}
+            </div>
+
+            {/* Value & Title */}
+            <div>
+              <div className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight truncate">
+                {item.value}
+              </div>
+
+              <div className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300 mt-1">
+                {item.title}
+              </div>
+
+              <p className="text-[11px] sm:text-xs text-slate-400 dark:text-slate-500 mt-0.5 truncate">
+                {item.subtitle}
+              </p>
             </div>
           </div>
+        );
+
+        return item.link ? (
+          <Link key={item.title} to={item.link}>
+            {Content}
+          </Link>
+        ) : (
+          <div key={item.title}>{Content}</div>
         );
       })}
     </div>
   );
-}
-
-function calculateScore(profile) {
-  if (!profile) return 0;
-
-  let score = 0;
-
-  if (profile.name) score += 10;
-  if (profile.department) score += 10;
-  if (profile.year) score += 10;
-  if (profile.specialization) score += 10;
-  if (profile.about_me) score += 20;
-  if (profile.skills) score += 20;
-  if (profile.github_url) score += 10;
-  if (profile.linkedin_url) score += 5;
-  if (profile.portfolio_url) score += 5;
-
-  return score;
 }
 
 export default ProfileStats;

@@ -387,6 +387,7 @@ class ChatService:
             query = query.filter(
                 or_(
                     User.name.ilike(term),
+                    User.register_number.ilike(term),
                     User.college_email.ilike(term),
                     User.skills.ilike(term),
                     User.department.ilike(term)
@@ -403,6 +404,7 @@ class ChatService:
             results.append({
                 "id": u.id,
                 "name": u.name,
+                "register_number": u.register_number,
                 "college_email": u.college_email,
                 "department": u.department,
                 "year": u.year,

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Users, Code, ArrowRight } from "lucide-react";
+import { Users, Code, ArrowRight, MessageSquare } from "lucide-react";
 
 function TeamCard({ team }) {
   return (
@@ -19,10 +19,29 @@ function TeamCard({ team }) {
         </div>
 
         {team.owner_name && (
-          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-            Led by <span className="font-medium text-slate-600 dark:text-slate-300">{team.owner_name}</span>
-            {team.owner_department ? ` (${team.owner_department})` : ""}
-          </p>
+          <div className="flex items-center justify-between mt-1.5 pt-1">
+            <p className="text-xs text-slate-400 dark:text-slate-500">
+              Led by{" "}
+              <Link
+                to={`/profile/${team.owner_id}`}
+                className="font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:underline"
+              >
+                {team.owner_name}
+              </Link>
+              {team.owner_department ? ` (${team.owner_department})` : ""}
+            </p>
+
+            {team.owner_id && (
+              <Link
+                to={`/chat?user=${team.owner_id}`}
+                title={`Direct Message ${team.owner_name}`}
+                className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-slate-700 dark:hover:bg-slate-600 text-blue-600 dark:text-blue-400 transition"
+              >
+                <MessageSquare size={12} />
+                <span>DM</span>
+              </Link>
+            )}
+          </div>
         )}
 
         <p className="text-gray-500 dark:text-slate-400 mt-3 line-clamp-3 text-sm leading-relaxed">
